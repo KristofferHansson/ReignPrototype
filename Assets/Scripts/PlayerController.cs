@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, playerMaster.transform.position.y + Camera.main.transform.position.y));
 
 
-        /* Commenting Out Grapple Code
+        
         Vector3 temp = m_Rigidbody.transform.position;
         temp.y = 0;
         mouse.y = 0;
@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         // rotate saw
         weaponHinge.transform.forward = mouseDiff;
 
+        /* Commenting Out Grapple Code***********************************
         if (heldObject && Input.GetMouseButtonDown(1))
         {// drop object if held
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
