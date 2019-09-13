@@ -72,6 +72,9 @@ public class PlayerController : MonoBehaviour
         Vector3 mouse = Input.mousePosition;
         //print(mouse);
         mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, playerMaster.transform.position.y + Camera.main.transform.position.y));
+
+
+        /* Commenting Out Grapple Code
         Vector3 temp = m_Rigidbody.transform.position;
         temp.y = 0;
         mouse.y = 0;
@@ -158,7 +161,9 @@ public class PlayerController : MonoBehaviour
                         player.Heal(10.0f);
                 }
             }
+            
         }
+        */
     }
 
     // Finds component in target game object or parents
