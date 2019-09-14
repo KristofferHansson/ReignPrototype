@@ -25,16 +25,8 @@ public class GrappleFinder : MonoBehaviour
     void Update()
     {
         shortestObj = FindTarget();
+        
         //print(shortestObj);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(Mathf.Abs(Vector3.Distance(player.transform.position,other.transform.position)) < shortestDistance)
-        {
-            shortestObj = other.gameObject;
-            shortestDistance = Mathf.Abs(Vector3.Distance(player.transform.position, other.transform.position));
-        }
     }
 
     GameObject FindTarget()

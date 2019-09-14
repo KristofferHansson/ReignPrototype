@@ -43,15 +43,16 @@ public class Grapple : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             
-            if (!isGrappled && !grappleFired)
+            if (!isGrappled && !pullingObject && !pullingToObject)
             {
                 ShootGrapple();
                 //StartCoroutine(ShootGrappleProj());
             }
-            else
+            else if(!pullingToObject && pullingObject)
             {
                 isGrappled = false;
                 grappleFired = false;
+                grappledObj = null;
                 grappleHook.transform.position = parent.transform.position;
             }
         }
@@ -81,6 +82,9 @@ public class Grapple : MonoBehaviour
         pullingObject = true;
         while (true)
         {
+            //If pull get's interrupted
+            if (!isGrappled)
+                break;
             if (Mathf.Abs(Vector3.Distance(parent.transform.position, grappledObj.transform.position)) < distanceBetweenPulledObjs)
             {
                 grappledObj = null;
@@ -105,8 +109,12 @@ public class Grapple : MonoBehaviour
     {
         pullingToObject = true;
         Vector3 grapplePos = grappleHook.transform.position;
+
         while (true)
         {
+            //If pull get's interrupted
+            if (!isGrappled)
+                break;
             grappleHook.transform.position = grapplePos;
             if (Mathf.Abs(Vector3.Distance(parent.transform.position, grappledObj.transform.position)) < distanceBetweenPulledObjs)
             {
@@ -146,4 +154,11 @@ public class Grapple : MonoBehaviour
             }
         }
     }
+    /*
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "ground")
+            isGrappled = false;
+    }
+    */
 }

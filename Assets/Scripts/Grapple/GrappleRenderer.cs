@@ -48,10 +48,6 @@ public class GrappleRenderer : MonoBehaviour
             prevRenderer.material = prevMat;
             m_RendererGrappled.material = matGrappled;
             prevRenderer = m_RendererGrappled;
-            if (m_RendererGrappled != prevRenderer)
-            {
-                
-            }
         }
     }
 

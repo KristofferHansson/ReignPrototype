@@ -7,6 +7,7 @@ public class EnemyProj : MonoBehaviour
     public GameObject player;
     public int Bullet_speed = 10;
 
+    public UnlockableWall wallParent;
     public float health = 100;
     private Vector3 Direction_to_Player;
     private float turning_speed = 6f;
@@ -41,6 +42,7 @@ public class EnemyProj : MonoBehaviour
     {
         //Turn_Dir_to_Player();
         Range();
+        Attack();
         
     }
 
@@ -51,7 +53,7 @@ public class EnemyProj : MonoBehaviour
         {
             if (In_Range)
             {
-
+                
                 GameObject Bullet = Instantiate(Enemy_Bullet, transform.position, Quaternion.identity);
                 Bullet.transform.parent = gameObject.transform;
                 Bullet.GetComponent<Enemy_Bullet>().target = player.transform.position - transform.position;
