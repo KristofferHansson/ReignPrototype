@@ -8,8 +8,12 @@ public class GrappleFinder : MonoBehaviour
     public GameObject shortestObj;
     public GameObject player;
     Grapple grapple;
-    public 
+    public
     float shortestDistance = Mathf.Infinity;
+    //public Renderer m_Renderer;
+    //public Renderer prevRenderer = null;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +25,7 @@ public class GrappleFinder : MonoBehaviour
     void Update()
     {
         shortestObj = FindTarget();
-        print(shortestObj);
+        //print(shortestObj);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,6 +67,7 @@ public class GrappleFinder : MonoBehaviour
         return shortestCollider.gameObject;
     }
 
+    
     private void OnDrawGizmos()
     {
        // Gizmos.color = Color.yellow;

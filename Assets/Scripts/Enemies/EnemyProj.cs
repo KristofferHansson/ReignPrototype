@@ -7,6 +7,7 @@ public class EnemyProj : MonoBehaviour
     public GameObject player;
     public int Bullet_speed = 10;
 
+    public float health = 100;
     private Vector3 Direction_to_Player;
     private float turning_speed = 6f;
 
@@ -40,16 +41,7 @@ public class EnemyProj : MonoBehaviour
     {
         //Turn_Dir_to_Player();
         Range();
-        Attack();
-        Check_Health();
-    }
-
-    void Turn_Dir_to_Player()
-    {
-        Direction_to_Player = player.transform.position - transform.position;
-        float angle = Mathf.Atan2(Direction_to_Player.y, Direction_to_Player.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, turning_speed * Time.deltaTime);
+        
     }
 
     void Attack()
@@ -102,20 +94,30 @@ public class EnemyProj : MonoBehaviour
         */
     }
 
-    void Check_Health()
+    private void OnTriggerEnter(Collider other)
     {
-        if (Health <= 0)
+        /*
+        if(other.tag == inserttag)
+          TakeDamage();
+          */
+    }
+
+    void TakeDamage(float damageTaken)
+    {
+        health -= damageTaken;
+        if(health < 0)
         {
-            gameObject.SetActive(false);
+            Die();
         }
     }
 
+    void Die()
+    {
+
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player_Weapon")
-        {
-            Health -= collision.gameObject.GetComponentInParent<Player>().Damage;
-        }
+        
     }
 
     void Range()
@@ -123,7 +125,7 @@ public class EnemyProj : MonoBehaviour
         if (player)
         {
             //print(speed);
-            if (Vector2.Distance(player.transform.position, transform.position) <= Attack_Range)
+            if (Vector3.Distance(player.transform.position, transform.position) <= Attack_Range)
             {
                 //print(Vector2.Distance(player.transform.position, transform.position));
                 In_Range = true;

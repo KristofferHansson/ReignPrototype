@@ -16,15 +16,15 @@ public class Grapple : MonoBehaviour
     public GameObject grappleHook;
     public GameObject target;
     public GameObject parent;
-    bool isGrappled = false;
+    public bool isGrappled = false;
     bool grappleFired = false;
     bool pullingObject = false;
     bool pullingToObject = false;
     GrappleFinder grappleFinder;
-    GameObject grappledObj;
+    public GameObject grappledObj;
     
     Player player;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -127,6 +127,7 @@ public class Grapple : MonoBehaviour
         grappleHook.transform.position = parent.transform.position;
     }
 
+   
     void ShootGrapple()
     {
         if (grappleFinder.shortestObj == null)
