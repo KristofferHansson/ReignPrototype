@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1192073500634150014}
   m_Layer: 0
   m_Name: CirclePillar
-  m_TagString: CanGrapple
+  m_TagString: PullTo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c7527743bafc3ba4fb2d60a5fe576cf5, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

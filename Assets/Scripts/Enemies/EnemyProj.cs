@@ -6,7 +6,7 @@ public class EnemyProj : MonoBehaviour
 {
     public GameObject player;
     public int Bullet_speed = 10;
-
+    public Grapple grapple;
     public UnlockableWall wallParent;
     public float health = 100;
     private Vector3 Direction_to_Player;
@@ -31,9 +31,13 @@ public class EnemyProj : MonoBehaviour
     public bool In_Range = false;
 
     public float Attack_Range;
+
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
+        
+        rb = GetComponent<Rigidbody>();
         Can_Attack = true;
     }
 
@@ -43,6 +47,8 @@ public class EnemyProj : MonoBehaviour
         //Turn_Dir_to_Player();
         Range();
         Attack();
+        if (rb.velocity.y < -45)
+            TakeDamage(100);
         
     }
 
@@ -115,7 +121,19 @@ public class EnemyProj : MonoBehaviour
 
     void Die()
     {
-
+        if(grapple.grappledObj == gameObject)
+        {
+            //Let's player know that they are grappling on to nothing
+            grapple.grappledObj = null;
+            grapple.pullingObject = false;
+            grapple.pullingToObject = false;
+            grapple.isGrappled = false;
+        }
+        if(wallParent != null)
+        {
+            wallParent.enemies.Remove(gameObject);
+        }
+        Destroy(gameObject);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

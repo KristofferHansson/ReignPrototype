@@ -38,16 +38,17 @@ public class GrappleRenderer : MonoBehaviour
             return;
         if (grapple.grappledObj == null && m_RendererGrappled != null)
         {
+            print("Done");
             m_RendererGrappled.material = prevMat;
+            if(m_Renderer != null)
+                m_Renderer.material = mat;
             m_RendererGrappled = null;
-            prevRenderer = null;
+
         }
         if (grapple.grappledObj != null)
         {
             m_RendererGrappled = grapple.grappledObj.GetComponent<MeshRenderer>();
-            prevRenderer.material = prevMat;
             m_RendererGrappled.material = matGrappled;
-            prevRenderer = m_RendererGrappled;
         }
     }
 
@@ -67,7 +68,7 @@ public class GrappleRenderer : MonoBehaviour
             //base case
             if (prevRenderer == null)
             {
-
+                print("Happened");
                 prevRenderer = m_Renderer;
                 prevMat = prevRenderer.material;
                 m_Renderer.material = mat;

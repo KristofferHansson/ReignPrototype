@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < -15.0f) // Eventually change to get current level killz
+        if (transform.position.y < -40.0f) // Eventually change to get current level killz
             player.TakeDamage(100.0f);
 
         float x = 0.0f, z = 0.0f;
@@ -190,7 +190,6 @@ public class PlayerController : MonoBehaviour
             
         m_Rigidbody.velocity = new Vector3(move.x * move_Speed, m_Rigidbody.velocity.y, move.z * move_Speed);
         
-        print(m_Rigidbody.velocity);
     }
 
     public void Die()

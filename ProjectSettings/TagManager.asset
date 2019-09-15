@@ -7,6 +7,9 @@ TagManager:
   - CanGrapple
   - floor
   - Enemy
+  - Pullable
+  - PullTo
+  - BothPull
   layers:
   - Default
   - TransparentFX

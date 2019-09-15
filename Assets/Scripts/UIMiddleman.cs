@@ -10,11 +10,15 @@ public class UIMiddleman : MonoBehaviour
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider heatSlider;
     [SerializeField] private Canvas c;
+    [SerializeField] private Image grappleMode;
+    [SerializeField] private Sprite attack;
+    [SerializeField] private Sprite navigate;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text grappleIndicator;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject startPanel;
+
 
     private bool gameOver = false;
 
@@ -30,6 +34,13 @@ public class UIMiddleman : MonoBehaviour
         grappleIndicator.gameObject.SetActive(false);
     }
 
+    public void SetGrappleMode(bool combatMode)
+    {
+        if (combatMode)
+            grappleMode.sprite = attack;
+        else
+            grappleMode.sprite = navigate;
+    }
     public void SetPlayerHP(float fracRemaining)
     {
         if (fracRemaining < 0) fracRemaining = 0;

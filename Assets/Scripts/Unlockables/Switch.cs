@@ -21,18 +21,29 @@ public class Switch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print(other.name);
         if(other.name == "PCollider")
         {
             print("Ayy");
-            wall.keys.Remove(gameObject);
+            wall.isUnlocked = true;
+        }
+        
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "BothPull" || other.tag == "Pullable")
+        {
+            wall.isUnlocked = true;
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if(other.name == "PCollider" && !nonPermenant)
         {
-            wall.keys.Add(gameObject);
+            wall.isUnlocked = false;
+        }
+        if ((other.tag == "BothPull" || other.tag == "Pullable") && !nonPermenant)
+        {
+            wall.isUnlocked = false;
         }
     }
 }

@@ -6,8 +6,9 @@ public class UnlockableWall : MonoBehaviour
 {
     public List<GameObject> enemies;
     public List<GameObject> keys;
-    bool isUnlocked = false;
+    public bool isUnlocked = false;
     public bool needEnemies;
+    public bool needSwitch;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +18,11 @@ public class UnlockableWall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckForKey();
-        CheckForKeysAndEnemies();
+        if (!needSwitch)
+        {
+            CheckForKey();
+            CheckForKeysAndEnemies();
+        }
         CheckForUnlocked();
     }
     void CheckForUnlocked()

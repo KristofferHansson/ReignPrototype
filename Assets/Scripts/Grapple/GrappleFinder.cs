@@ -36,8 +36,9 @@ public class GrappleFinder : MonoBehaviour
         Collider shortestCollider = null;
         foreach (Collider col in colliders)
         {
-            if(col.tag == "CanGrapple" || col.tag == "Enemy" && !grapple.combatMode)
+            if((col.tag == "PullTo" || col.tag == "Pullable" || col.tag == "BothPull") && !grapple.combatMode)
             {
+                print("in here");
                 if (Vector3.Distance(player.transform.position, col.transform.position) < shortestDistance)
                 {
                     shortestDistance = Vector3.Distance(player.transform.position, col.transform.position);
@@ -46,6 +47,7 @@ public class GrappleFinder : MonoBehaviour
             }
             if(col.tag == "Enemy" && grapple.combatMode)
             {
+                
                 if (Vector3.Distance(player.transform.position, col.transform.position) < shortestDistance)
                 {
                     shortestDistance = Vector3.Distance(player.transform.position, col.transform.position);

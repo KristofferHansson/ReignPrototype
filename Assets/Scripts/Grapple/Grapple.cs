@@ -23,6 +23,7 @@ public class Grapple : MonoBehaviour
     GrappleFinder grappleFinder;
     public GameObject grappledObj;
     public GameObject pCollider;
+    public UIMiddleman uiMiddleMan;
     Player player;
     
     // Start is called before the first frame update
@@ -36,6 +37,7 @@ public class Grapple : MonoBehaviour
     // Update is called once per frames
     void Update()
     {
+        uiMiddleMan.SetGrappleMode(combatMode);
         if(!isGrappled)
         {
             grappleFired = false;
@@ -47,7 +49,8 @@ public class Grapple : MonoBehaviour
         {
             transform.position = pCollider.transform.position;
         }
-
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+            combatMode = !combatMode;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             
@@ -63,22 +66,33 @@ public class Grapple : MonoBehaviour
                 grappledObj = null;
                 grappleHook.transform.position = pCollider.transform.position;
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Q) && !pullingObject && !pullingToObject)
-        {
-            if (isGrappled)
+            else
             {
-                StartCoroutine(PullObjectTowards());
+                isGrappled = false;
+                grappleFired = false;
+                grappledObj = null;
+                grappleHook.transform.position = pCollider.transform.position;
             }
         }
-        if (Input.GetKeyDown(KeyCode.E) && !pullingObject && !pullingToObject)
+        if(grappledObj != null)
         {
-            if (isGrappled)
+            if (Input.GetKeyDown(KeyCode.Q) && !pullingObject && !pullingToObject && grappledObj.tag != "PullTo")
             {
-                StartCoroutine(PullToPosition());
+                if (isGrappled)
+                {
+                    StartCoroutine(PullObjectTowards());
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.E) && !pullingObject && !pullingToObject && grappledObj.tag != "Pullable")
+            {
+                if (isGrappled)
+                {
+                    StartCoroutine(PullToPosition());
 
+                }
             }
         }
+        
         //Debug.DrawRay(transform.position, transform.up * 1000, Color.red,100);
 
 
@@ -107,7 +121,8 @@ public class Grapple : MonoBehaviour
             yield return new WaitForFixedUpdate();
             //Vector3 dir = grappledPos - (Vector3)parent.transform.position;
 
-
+            if (grappledObj == null)
+                break;
             Vector3 dir = grappledObj.transform.position - (parent.transform.position+ offset);
             grappleHook.transform.position -= dir.normalized * timePerGrappleMovement;
             grappledObj.transform.position -= dir.normalized * timePerGrappleMovement;
@@ -136,6 +151,9 @@ public class Grapple : MonoBehaviour
             }
 
             yield return new WaitForFixedUpdate();
+
+            if (grappledObj == null)
+                break;
             Vector3 dir = grappledObj.transform.position - parent.transform.position;
 
             parent.transform.position += dir.normalized * timePerGrappleMovement;
