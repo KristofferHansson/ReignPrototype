@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CanGrapple
   - floor
+  - Enemy
   layers:
   - Default
   - TransparentFX

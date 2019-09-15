@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject weaponHinge;
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman ui;
+
+    public Grapple grapple;
     private Player player;
     private Rigidbody m_Rigidbody;
     private Vector3 move;
@@ -180,7 +182,15 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        m_Rigidbody.velocity = move * move_Speed;
+        if (grapple.pullingObject || grapple.pullingToObject)
+        {
+            m_Rigidbody.velocity = new Vector3(0, 0, 0);
+            return;
+        }
+            
+        m_Rigidbody.velocity = new Vector3(move.x * move_Speed, m_Rigidbody.velocity.y, move.z * move_Speed);
+        
+        print(m_Rigidbody.velocity);
     }
 
     public void Die()

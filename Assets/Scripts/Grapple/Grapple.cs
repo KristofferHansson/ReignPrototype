@@ -18,26 +18,34 @@ public class Grapple : MonoBehaviour
     public GameObject parent;
     public bool isGrappled = false;
     bool grappleFired = false;
-    bool pullingObject = false;
-    bool pullingToObject = false;
+    public bool pullingObject = false;
+    public bool pullingToObject = false;
     GrappleFinder grappleFinder;
     public GameObject grappledObj;
-    
+    public GameObject pCollider;
     Player player;
     
     // Start is called before the first frame update
     void Start()
     {
         parent = GameObject.Find("PlayerMaster");
+        pCollider = GameObject.Find("PCollider");
         grappleFinder = GetComponentInChildren<GrappleFinder>();
     }
 
     // Update is called once per frames
     void Update()
     {
+        if(!isGrappled)
+        {
+            grappleFired = false;
+            pullingObject = false;
+            pullingToObject = false;
+            grappledObj = null;
+        }
         if (!isGrappled && !grappleFired && !pullingObject && !pullingToObject)
         {
-            transform.position = parent.transform.position;
+            transform.position = pCollider.transform.position;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -53,7 +61,7 @@ public class Grapple : MonoBehaviour
                 isGrappled = false;
                 grappleFired = false;
                 grappledObj = null;
-                grappleHook.transform.position = parent.transform.position;
+                grappleHook.transform.position = pCollider.transform.position;
             }
         }
         if (Input.GetKeyDown(KeyCode.Q) && !pullingObject && !pullingToObject)
@@ -79,13 +87,16 @@ public class Grapple : MonoBehaviour
 
     IEnumerator PullObjectTowards()
     {
+        Vector3 offset = new Vector3(0, 2, 0);
         pullingObject = true;
         while (true)
         {
             //If pull get's interrupted
             if (!isGrappled)
                 break;
-            if (Mathf.Abs(Vector3.Distance(parent.transform.position, grappledObj.transform.position)) < distanceBetweenPulledObjs)
+            if (grappledObj == null)
+                break;
+            if (Mathf.Abs(Vector3.Distance(parent.transform.position + offset, grappledObj.transform.position)) < distanceBetweenPulledObjs)
             {
                 grappledObj = null;
                 isGrappled = false;
@@ -97,13 +108,13 @@ public class Grapple : MonoBehaviour
             //Vector3 dir = grappledPos - (Vector3)parent.transform.position;
 
 
-            Vector3 dir = grappledObj.transform.position - parent.transform.position;
+            Vector3 dir = grappledObj.transform.position - (parent.transform.position+ offset);
             grappleHook.transform.position -= dir.normalized * timePerGrappleMovement;
             grappledObj.transform.position -= dir.normalized * timePerGrappleMovement;
         }
         grappleFired = false;
         // Resets grapple
-        grappleHook.transform.position = parent.transform.position;
+        grappleHook.transform.position = pCollider.transform.position;
     }
     IEnumerator PullToPosition()
     {
@@ -132,7 +143,7 @@ public class Grapple : MonoBehaviour
         }
         //Resets Grapple
         grappleFired = false;
-        grappleHook.transform.position = parent.transform.position;
+        grappleHook.transform.position = pCollider.transform.position;
     }
 
    
@@ -154,11 +165,14 @@ public class Grapple : MonoBehaviour
             }
         }
     }
-    /*
-    private void OnTriggerEnter(Collider other)
+    
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "ground")
+        if (other.gameObject.tag == "floor")
+        {
             isGrappled = false;
+        }
+            
     }
-    */
+    
 }

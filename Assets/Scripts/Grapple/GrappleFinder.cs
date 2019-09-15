@@ -36,7 +36,7 @@ public class GrappleFinder : MonoBehaviour
         Collider shortestCollider = null;
         foreach (Collider col in colliders)
         {
-            if(col.tag == "CanGrapple" && !grapple.combatMode)
+            if(col.tag == "CanGrapple" || col.tag == "Enemy" && !grapple.combatMode)
             {
                 if (Vector3.Distance(player.transform.position, col.transform.position) < shortestDistance)
                 {

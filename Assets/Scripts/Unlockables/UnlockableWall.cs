@@ -17,36 +17,49 @@ public class UnlockableWall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckForEnemies();
         CheckForKey();
         CheckForKeysAndEnemies();
+        CheckForUnlocked();
     }
     void CheckForUnlocked()
     {
         if (isUnlocked)
-            gameObject.SetActive(false);
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<BoxCollider>().enabled = false;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().enabled = true;
+            GetComponent<BoxCollider>().enabled = true;
+        }
     }
-    void CheckForEnemies()
+    void CheckForKeysAndEnemies()
     {
-        if (enemies.Count < 1 && needEnemies)
+        if (!needEnemies)
+            return;
+        if (keys.Count < 1 && enemies.Count < 1)
         {
             isUnlocked = true;
+        }
+        else if (keys.Count >= 1 || enemies.Count >= 1)
+        {
+            isUnlocked = false;
         }
     }
 
     void CheckForKey()
     {
-        if (keys.Count < 1 && !needEnemies)
+        if (needEnemies)
+            return;
+        if (keys.Count < 1)
         {
+
             isUnlocked = true;
         }
-    }
-
-    void CheckForKeysAndEnemies()
-    {
-        if(keys.Count <1 && enemies.Count <1 && needEnemies)
+        else if(keys.Count > 0)
         {
-            isUnlocked = true;
+            isUnlocked = false;
         }
     }
 }
