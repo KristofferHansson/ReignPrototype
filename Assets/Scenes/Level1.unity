@@ -998,11 +998,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4139046793987693426, guid: 3e94dee9013cd9446be53cdc015ef3e1,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 122
-      objectReference: {fileID: 0}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: player
@@ -1023,6 +1018,11 @@ PrefabInstance:
       propertyPath: grapple
       value: 
       objectReference: {fileID: 181102778}
+    - target: {fileID: 4139046793987693426, guid: 3e94dee9013cd9446be53cdc015ef3e1,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 122
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e94dee9013cd9446be53cdc015ef3e1, type: 3}
 --- !u!1 &124748214 stripped
@@ -1895,8 +1895,8 @@ Transform:
   - {fileID: 1461358357}
   - {fileID: 1119227061}
   - {fileID: 856505623}
-  - {fileID: 1717356484}
   - {fileID: 983048797}
+  - {fileID: 1717356484}
   - {fileID: 315629791}
   - {fileID: 909983872}
   m_Father: {fileID: 316023699}
@@ -15642,7 +15642,7 @@ PrefabInstance:
     - target: {fileID: 1192073500634150001, guid: e54e272c2d280834dab874abdf9bb042,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 368.78
+      value: 363.72
       objectReference: {fileID: 0}
     - target: {fileID: 1192073500634150001, guid: e54e272c2d280834dab874abdf9bb042,
         type: 3}
@@ -18166,11 +18166,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4139046793987693426, guid: 3e94dee9013cd9446be53cdc015ef3e1,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 122
-      objectReference: {fileID: 0}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: player
@@ -18186,6 +18181,11 @@ PrefabInstance:
       propertyPath: grapple
       value: 
       objectReference: {fileID: 181102778}
+    - target: {fileID: 4139046793987693426, guid: 3e94dee9013cd9446be53cdc015ef3e1,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 122
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e94dee9013cd9446be53cdc015ef3e1, type: 3}
 --- !u!1001 &1428388628
@@ -28057,11 +28057,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4139046793987693426, guid: 3e94dee9013cd9446be53cdc015ef3e1,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 122
-      objectReference: {fileID: 0}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: player
@@ -28082,5 +28077,10 @@ PrefabInstance:
       propertyPath: grapple
       value: 
       objectReference: {fileID: 181102778}
+    - target: {fileID: 4139046793987693426, guid: 3e94dee9013cd9446be53cdc015ef3e1,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 122
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e94dee9013cd9446be53cdc015ef3e1, type: 3}

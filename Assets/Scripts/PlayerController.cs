@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject weaponHinge;
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman ui;
+    [SerializeField] private Transform camRig;
 
     public Grapple grapple;
     private Player player;
@@ -73,7 +74,7 @@ public class PlayerController : MonoBehaviour
         // get mousepos
         Vector3 mouse = Input.mousePosition;
         //print(mouse);
-        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, playerMaster.transform.position.y + Camera.main.transform.position.y));
+        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, /*playerMaster.transform.position.y + */(Camera.main.transform.position - camRig.position).magnitude - 1f));
 
 
         
