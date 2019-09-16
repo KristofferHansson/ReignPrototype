@@ -7,6 +7,9 @@ public class Switch : MonoBehaviour
     //Whether something needs to be permenantly on the switch or not
     public bool nonPermenant;
     public UnlockableWall wall;
+    public CameraShake cameraShake;
+    public bool runEvent;
+    public bool eventStarted;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +22,19 @@ public class Switch : MonoBehaviour
         
     }
 
+
+    private void StartEvent()
+    {
+        eventStarted = true;
+        cameraShake.enabled = true;
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.name == "PCollider")
+        
+        if(other.name == "PCollider" )
         {
-            print("Ayy");
+            if (runEvent)
+                StartEvent();
             wall.isUnlocked = true;
         }
         
@@ -37,7 +48,9 @@ public class Switch : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.name == "PCollider" && !nonPermenant)
+        if (wall == null)
+            return;
+        if (other.name == "PCollider" && !nonPermenant)
         {
             wall.isUnlocked = false;
         }

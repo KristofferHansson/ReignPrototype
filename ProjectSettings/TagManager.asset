@@ -10,6 +10,7 @@ TagManager:
   - Pullable
   - PullTo
   - BothPull
+  - Fog
   layers:
   - Default
   - TransparentFX

@@ -44,6 +44,7 @@ public class UnlockableWall : MonoBehaviour
             return;
         if (keys.Count < 1 && enemies.Count < 1)
         {
+            
             isUnlocked = true;
         }
         else if (keys.Count >= 1 || enemies.Count >= 1)

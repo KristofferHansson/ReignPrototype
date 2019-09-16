@@ -38,7 +38,6 @@ public class GrappleFinder : MonoBehaviour
         {
             if((col.tag == "PullTo" || col.tag == "Pullable" || col.tag == "BothPull") && !grapple.combatMode)
             {
-                print("in here");
                 if (Vector3.Distance(player.transform.position, col.transform.position) < shortestDistance)
                 {
                     shortestDistance = Vector3.Distance(player.transform.position, col.transform.position);
