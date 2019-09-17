@@ -203,6 +203,7 @@ public class PlayerController : MonoBehaviour
         }
 
         m_Rigidbody.velocity = new Vector3(move.x, m_Rigidbody.velocity.y, move.z);
+        //print(m_Rigidbody.velocity);
     }
 
     private IEnumerator AnimHitOne()

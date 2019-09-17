@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAttackTrigger : MonoBehaviour
 {
-    private float dmg = 10.0f;
+    [SerializeField] private float dmg = 10.0f;
 
     void OnTriggerEnter(Collider other)
     {

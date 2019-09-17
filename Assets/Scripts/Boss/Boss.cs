@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-    public float health = 100;
-    public bool dead = false;
+    [SerializeField] private float health = 100;
+    [SerializeField] private bool dead = false;
+    private float rotRate = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,14 +22,43 @@ public class Boss : MonoBehaviour
 
     public void TakeDamage()
     {
-        health -= 5;
+        //health += -8.34f; // for real gameplay
+        health += -20f; // for demo
+        rotRate += 1.3f;
+        Attack();
         if (health < 0)
             Die();
     }
 
-    void Die()
+    private void Attack()
     {
+        StartCoroutine(Spin());
+    }
+
+    IEnumerator Spin()
+    {
+        while (true)
+        {
+            this.transform.Rotate(0,rotRate * Time.deltaTime,0);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private void Die()
+    {
+        StopAllCoroutines();
         dead = true;
-        transform.position -= new Vector3(0, 2, 0) * 6 * Time.deltaTime;
+        StartCoroutine(Descend());
+    }
+
+    IEnumerator Descend()
+    {
+        while (true)
+        {
+            this.transform.position += new Vector3(0, -3.0f * Time.deltaTime, 0);
+            yield return new WaitForEndOfFrame();
+            if (this.transform.position.y < -30.0f)
+                break;
+        }
     }
 }

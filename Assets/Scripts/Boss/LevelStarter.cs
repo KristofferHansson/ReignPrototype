@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class LevelStarter : MonoBehaviour
 {
-    GameObject boss;
+    [SerializeField] private float speed;
+    [SerializeField] private GameObject axe1;
+    [SerializeField] private GameObject axe2;
 
+    GameObject boss;
     GameObject player;
-    [SerializeField]
-    float speed;
     bool playerStoppedWalking = false;
     bool playerCanMove = false;
     bool bossEntered = false;
@@ -31,6 +32,9 @@ public class LevelStarter : MonoBehaviour
         WalkForward();
         if(firstPluck)
             EnterBoss();
+
+        if (bossEntered)
+            Destroy(this);
     }
 
     void WalkForward()
@@ -50,8 +54,10 @@ public class LevelStarter : MonoBehaviour
         {
             
             cameraShake.enabled = true;
-            print("In here");
+            //print("In here");
             boss.transform.position += new Vector3(0, 2, 0) * speed * Time.deltaTime;
+            axe1.transform.localPosition += new Vector3(0.12f, 0, 0) * speed * Time.deltaTime;
+            axe2.transform.localPosition += new Vector3(-0.12f, 0, 0) * speed * Time.deltaTime;
             if (boss.transform.position.y > -10)
             {
                 bossEntered = true;
