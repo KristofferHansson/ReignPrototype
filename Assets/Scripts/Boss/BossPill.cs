@@ -8,9 +8,12 @@ public class BossPill : MonoBehaviour
     Boss boss;
     public Grapple grapple;
     Rigidbody rb;
-    float timer = .8f;
+    float timer = .7f;
     public bool fall = false;
     public bool isFirst;
+
+    //Only need this for the first pill
+    public LevelStarter levelStarter;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +25,7 @@ public class BossPill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(grapple.grappledObj == gameObject)
+        if(grapple.grappledObj == gameObject && grapple.pullingObject)
         {
             fall = true;
         }
@@ -36,15 +39,16 @@ public class BossPill : MonoBehaviour
             timer -=  Time.deltaTime;
             if(timer < 0)
             {
-                rb.useGravity = true;
-                grapple.grappledObj = null;
-                grapple.isGrappled = false;
-                grapple.pullingObject = false;
+                
                 //Meaning The first pill to go
                 if (isFirst)
                 {
-                    boss.TakeDamage();
+                    levelStarter.firstPluck = true;
+                    
+                    
                 }
+                boss.TakeDamage();
+                Destroy(gameObject);
             }
             
         }

@@ -29,7 +29,8 @@ public class LevelStarter : MonoBehaviour
     void Update()
     {
         WalkForward();
-        EnterBoss();
+        if(firstPluck)
+            EnterBoss();
     }
 
     void WalkForward()
@@ -44,11 +45,14 @@ public class LevelStarter : MonoBehaviour
 
     void EnterBoss()
     {
-        if(playerStoppedWalking && !bossEntered && firstPluck)
+        
+        if(playerStoppedWalking && !bossEntered)
         {
+            
             cameraShake.enabled = true;
+            print("In here");
             boss.transform.position += new Vector3(0, 2, 0) * speed * Time.deltaTime;
-            if (boss.transform.position.y > 0)
+            if (boss.transform.position.y > -10)
             {
                 bossEntered = true;
                 
