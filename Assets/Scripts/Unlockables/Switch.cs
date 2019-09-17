@@ -10,22 +10,32 @@ public class Switch : MonoBehaviour
     public CameraShake cameraShake;
     public bool runEvent;
     public bool eventStarted;
+    bool once;
+    public float waitingPeriod = 3;
+    UIMiddleman ui;
     // Start is called before the first frame update
     void Start()
     {
-        
+        ui = GameObject.Find("UIMaster").GetComponent<UIMiddleman>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (eventStarted)
+            waitingPeriod -= Time.deltaTime;
+        if(waitingPeriod < 0 && !once)
+        {
+            once = true;
+            StartCoroutine(ui.FadeTextToZeroAlpha(1, ui.fog));
+        }
     }
 
 
     private void StartEvent()
     {
         eventStarted = true;
+        StartCoroutine(ui.FadeTextToFullAlpha(1, ui.fog));
         cameraShake.enabled = true;
     }
     private void OnTriggerEnter(Collider other)

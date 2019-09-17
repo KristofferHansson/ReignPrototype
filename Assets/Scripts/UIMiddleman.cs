@@ -15,6 +15,7 @@ public class UIMiddleman : MonoBehaviour
     [SerializeField] private Sprite navigate;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text grappleIndicator;
+    public Text fog;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject startPanel;
@@ -26,6 +27,8 @@ public class UIMiddleman : MonoBehaviour
 
     void Start()
     {
+        if(fog != null)
+            fog.color = new Color(fog.color.r, fog.color.g, fog.color.b, 0); 
         RectTransform rt = c.GetComponent<RectTransform>();
         Offset = new Vector2(rt.sizeDelta.x / 2f, rt.sizeDelta.y / 2f);
         gameOverPanel.SetActive(false);
@@ -33,7 +36,25 @@ public class UIMiddleman : MonoBehaviour
         //startPanel.SetActive(true); // tutorial/intro message
         grappleIndicator.gameObject.SetActive(false);
     }
+    public IEnumerator FadeTextToFullAlpha(float t, Text i)
+    {
+        i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
+        while (i.color.a < 1.0f)
+        {
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a + (Time.deltaTime / t));
+            yield return null;
+        }
+    }
 
+    public IEnumerator FadeTextToZeroAlpha(float t, Text i)
+    {
+        i.color = new Color(i.color.r, i.color.g, i.color.b, 1);
+        while (i.color.a > 0.0f)
+        {
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
+            yield return null;
+        }
+    }
     public void SetGrappleMode(bool combatMode)
     {
         if (combatMode)

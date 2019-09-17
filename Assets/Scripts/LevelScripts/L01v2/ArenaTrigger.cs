@@ -18,7 +18,11 @@ public class ArenaTrigger : MonoBehaviour
         if (other.gameObject.name.Equals("PCollider"))
         {
             foreach (Enemy e in enemies)
-                e.enabled = true;
+            {
+                if (e != null)
+                    e.enabled = true;
+            }
+                
         }
     }
 }
