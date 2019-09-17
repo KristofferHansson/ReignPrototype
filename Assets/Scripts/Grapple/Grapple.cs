@@ -49,7 +49,7 @@ public class Grapple : MonoBehaviour
         {
             transform.position = pCollider.transform.position;
         }
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
             combatMode = !combatMode;
         if (Input.GetKeyDown(KeyCode.Space))
         {

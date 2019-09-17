@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private Transform camRig;
+    [SerializeField] private GameObject attackTrigger;
 
     public Grapple grapple;
     private Player player;
@@ -57,6 +58,14 @@ public class PlayerController : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.M))
         //    lvl.EHToggleMute();
 
+        /// Attacking
+        if (Input.GetMouseButtonDown(1))
+        {
+            print("attacking... ahhh");
+            attackTrigger.SetActive(true);
+            Invoke("DisableAttackTrigger", 0.4f);
+        }
+
         // Update movement vector
         move.x = x;
         move.z = z;
@@ -74,7 +83,7 @@ public class PlayerController : MonoBehaviour
         // get mousepos
         Vector3 mouse = Input.mousePosition;
         //print(mouse);
-        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, /*playerMaster.transform.position.y + */(Camera.main.transform.position - camRig.position).magnitude - 1f));
+        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
 
 
         
@@ -87,87 +96,89 @@ public class PlayerController : MonoBehaviour
         // rotate saw
         weaponHinge.transform.forward = mouseDiff;
 
-        /* Commenting Out Grapple Code***********************************
-        if (heldObject && Input.GetMouseButtonDown(1))
-        {// drop object if held
-            heldObject.GetComponent<Rigidbody>().isKinematic = false;
-            heldObject.transform.parent = null;
-            heldObject = null;
-
-            if (heldEnemy != null)
-                heldEnemy.Release();
-        }
-        else
         {
-            if (!bladeExtended)
+            /* Commenting Out Grapple Code***********************************
+            if (heldObject && Input.GetMouseButtonDown(1))
+            {// drop object if held
+                heldObject.GetComponent<Rigidbody>().isKinematic = false;
+                heldObject.transform.parent = null;
+                heldObject = null;
+
+                if (heldEnemy != null)
+                    heldEnemy.Release();
+            }
+            else
             {
-                // Note: hitObj is for grappling self, hitEnemy is for pulling enemy
-                // Send out ray each frame to update grapple indicator on UI
-                temp.y = m_Rigidbody.transform.position.y + 1.5f;
-                bool objHit = false;
-                if (objHit = Physics.Raycast(temp, mouseDiff, out RaycastHit hitObj, 30.0f, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
+                if (!bladeExtended)
                 {
-                    // show green indicator with distance of object
-                    ui.ShowGrappleIndicator(hitObj.distance);
-                }
-                else
-                {
-                    ui.ShowGrappleIndicator(-1.0f);
-                }
-
-                Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                if (objHit && Input.GetMouseButtonDown(0)) // GRAPPLE movement command
-                {
-                    playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
-                }
-                else if (Input.GetMouseButtonDown(1)) // PULL command
-                {
-                    //print("PULL");
-                    // lift vector off ground
-                    Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                    if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, 100.0f, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger")
+                    // Note: hitObj is for grappling self, hitEnemy is for pulling enemy
+                    // Send out ray each frame to update grapple indicator on UI
+                    temp.y = m_Rigidbody.transform.position.y + 1.5f;
+                    bool objHit = false;
+                    if (objHit = Physics.Raycast(temp, mouseDiff, out RaycastHit hitObj, 30.0f, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
                     {
-                        GameObject goHit = hit.collider.gameObject;
-                        //print("OBJECT HIT! " + goHit.name);
-                        FindAndReturnComponent(goHit, out Rigidbody rb);
-                        if (rb != null) // only pull objects with a rigidbody to avoid static objs
+                        // show green indicator with distance of object
+                        ui.ShowGrappleIndicator(hitObj.distance);
+                    }
+                    else
+                    {
+                        ui.ShowGrappleIndicator(-1.0f);
+                    }
+
+                    Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
+                    if (objHit && Input.GetMouseButtonDown(0)) // GRAPPLE movement command
+                    {
+                        playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
+                    }
+                    else if (Input.GetMouseButtonDown(1)) // PULL command
+                    {
+                        //print("PULL");
+                        // lift vector off ground
+                        Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
+                        if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, 100.0f, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger")
                         {
-                            FindAndReturnComponent(goHit, out Enemy e);
-                            if (e != null)
+                            GameObject goHit = hit.collider.gameObject;
+                            //print("OBJECT HIT! " + goHit.name);
+                            FindAndReturnComponent(goHit, out Rigidbody rb);
+                            if (rb != null) // only pull objects with a rigidbody to avoid static objs
                             {
-                                e.Grab();
-                                heldEnemy = e;
+                                FindAndReturnComponent(goHit, out Enemy e);
+                                if (e != null)
+                                {
+                                    e.Grab();
+                                    heldEnemy = e;
+                                }
+
+                                // Extend blade
+                                bladeExtended = true;
+                                //blade.transform.position = hit.point;
+                                bladeDistance = hit.distance - 5.0f;
+                                blade.transform.position += blade.transform.forward * bladeDistance;
+
+                                // Hold object
+                                rb.isKinematic = true;
+                                rb.gameObject.transform.parent = blade.transform;
+                                heldObject = rb.gameObject;
                             }
-
-                            // Extend blade
-                            bladeExtended = true;
-                            //blade.transform.position = hit.point;
-                            bladeDistance = hit.distance - 5.0f;
-                            blade.transform.position += blade.transform.forward * bladeDistance;
-
-                            // Hold object
-                            rb.isKinematic = true;
-                            rb.gameObject.transform.parent = blade.transform;
-                            heldObject = rb.gameObject;
                         }
                     }
                 }
-            }
-            else // if blade is out
-            {
-                // scroll wheel reels in blade
-                if (Input.mouseScrollDelta.y < 0.0f)
+                else // if blade is out
                 {
-                    bladeExtended = false;
-                    blade.transform.position += blade.transform.forward * -bladeDistance;
+                    // scroll wheel reels in blade
+                    if (Input.mouseScrollDelta.y < 0.0f)
+                    {
+                        bladeExtended = false;
+                        blade.transform.position += blade.transform.forward * -bladeDistance;
 
-                    if (heldEnemy != null) // Heal when enemies are pulled in
-                        player.Heal(10.0f);
+                        if (heldEnemy != null) // Heal when enemies are pulled in
+                            player.Heal(10.0f);
+                    }
                 }
+
             }
-            
+            */
         }
-        */
     }
 
     // Finds component in target game object or parents
@@ -191,6 +202,11 @@ public class PlayerController : MonoBehaviour
             
         m_Rigidbody.velocity = new Vector3(move.x * move_Speed, m_Rigidbody.velocity.y, move.z * move_Speed);
         
+    }
+
+    private void DisableAttackTrigger()
+    {
+        attackTrigger.SetActive(false);
     }
 
     public void Die()
