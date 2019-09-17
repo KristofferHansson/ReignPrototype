@@ -36,7 +36,8 @@ public class EnemyProj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        grapple = GameObject.Find("Grapple").GetComponent<Grapple>();
+        player = GameObject.Find("PCollider");
         rb = GetComponent<Rigidbody>();
         Can_Attack = true;
     }

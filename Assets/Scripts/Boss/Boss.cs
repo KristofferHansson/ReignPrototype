@@ -18,7 +18,7 @@ public class Boss : MonoBehaviour
         
     }
 
-    void TakeDamage()
+    public void TakeDamage()
     {
         health -= 5;
         if (health < 0)
