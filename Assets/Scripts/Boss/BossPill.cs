@@ -8,7 +8,7 @@ public class BossPill : MonoBehaviour
     Rigidbody rb;
     float timer = .8f;
     public bool fall = false;
-    
+    public bool isFirst;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +21,6 @@ public class BossPill : MonoBehaviour
     {
         if(grapple.grappledObj == gameObject)
         {
-            print("Ay");
             fall = true;
         }
         Die();

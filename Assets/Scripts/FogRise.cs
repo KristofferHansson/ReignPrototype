@@ -16,10 +16,10 @@ public class FogRise : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //print(transform.position.y);
+        print(transform.position.y);
         if (switchVar.eventStarted)
             timer -= 1 * Time.deltaTime;
-        if (timer < 0 && transform.position.y < 20)
+        if (timer < 0 && transform.position.y < -87)
             transform.position += new Vector3(0, fogSpeed, 0) *Time.deltaTime;
     }
 
