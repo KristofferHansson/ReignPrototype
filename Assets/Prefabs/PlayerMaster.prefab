@@ -599,6 +599,7 @@ MonoBehaviour:
   blade: {fileID: 429750705527827555}
   ui: {fileID: 0}
   camRig: {fileID: 8596134444039964527}
+  attackTrigger: {fileID: 1089486001}
   grapple: {fileID: 111328782}
 --- !u!114 &1471531320
 MonoBehaviour:
