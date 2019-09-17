@@ -19,7 +19,7 @@ public class FogRise : MonoBehaviour
         //print(transform.position.y);
         if (switchVar.eventStarted)
             timer -= 1 * Time.deltaTime;
-        if (timer < 0 && transform.position.y < -57)
+        if (timer < 0 && transform.position.y < 20)
             transform.position += new Vector3(0, fogSpeed, 0) *Time.deltaTime;
     }
 

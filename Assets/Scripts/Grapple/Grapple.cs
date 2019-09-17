@@ -76,14 +76,14 @@ public class Grapple : MonoBehaviour
         }
         if(grappledObj != null)
         {
-            if (Input.GetKeyDown(KeyCode.Q) && !pullingObject && !pullingToObject && grappledObj.tag != "PullTo")
+            if (Input.GetKeyDown(KeyCode.Q) && !pullingObject && !pullingToObject && grappledObj.tag != "PullTo" )
             {
                 if (isGrappled)
                 {
                     StartCoroutine(PullObjectTowards());
                 }
             }
-            if (Input.GetKeyDown(KeyCode.E) && !pullingObject && !pullingToObject && grappledObj.tag != "Pullable")
+            if (Input.GetKeyDown(KeyCode.E) && !pullingObject && !pullingToObject && grappledObj.tag != "Pullable" && grappledObj.tag != "BossPill")
             {
                 if (isGrappled)
                 {

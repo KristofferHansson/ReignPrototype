@@ -12,19 +12,24 @@ public class LevelStarter : MonoBehaviour
     bool playerStoppedWalking = false;
     bool playerCanMove = false;
     bool bossEntered = false;
-    CameraShake cameraShake;
+    public bool firstPluck = false;
+    
+    public CameraShake cameraShake;
+   
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("PlayerMaster");
         boss = GameObject.Find("Boss");
         cameraShake = GetComponent<CameraShake>();
+        print(boss);
     }
 
     // Update is called once per frame
     void Update()
     {
         WalkForward();
+        EnterBoss();
     }
 
     void WalkForward()
@@ -39,9 +44,17 @@ public class LevelStarter : MonoBehaviour
 
     void EnterBoss()
     {
-        if(playerStoppedWalking && !bossEntered)
+        if(playerStoppedWalking && !bossEntered && firstPluck)
         {
-
+            cameraShake.enabled = true;
+            boss.transform.position += new Vector3(0, 2, 0) * speed * Time.deltaTime;
+            if (boss.transform.position.y > 0)
+            {
+                bossEntered = true;
+                
+            }
+                
+            
         }
     }
 }
