@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BossPill : MonoBehaviour
 {
+
+    Boss boss;
     public Grapple grapple;
     Rigidbody rb;
     float timer = .8f;
@@ -14,6 +16,7 @@ public class BossPill : MonoBehaviour
     {
         grapple = GameObject.Find("Grapple").GetComponent<Grapple>();
         rb = GetComponent<Rigidbody>();
+        boss = GameObject.Find("Boss").GetComponent<Boss>();
     }
 
     // Update is called once per frame
@@ -37,6 +40,11 @@ public class BossPill : MonoBehaviour
                 grapple.grappledObj = null;
                 grapple.isGrappled = false;
                 grapple.pullingObject = false;
+                //Meaning The first pill to go
+                if (isFirst)
+                {
+                    boss.TakeDamage();
+                }
             }
             
         }
