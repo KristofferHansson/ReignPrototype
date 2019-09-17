@@ -21,7 +21,7 @@ public class Boss : MonoBehaviour
         health += -8.34f; // for real gameplay
         //health += -20f; // for demo
         //rotRate += 1.3f;
-        rotRate += 1f;
+        rotRate += .7f;
         Attack();
         if (health < 0)
             Die();
