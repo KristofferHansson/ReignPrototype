@@ -25,7 +25,13 @@ public class Grapple : MonoBehaviour
     public GameObject pCollider;
     public UIMiddleman uiMiddleMan;
     Player player;
-    
+
+    [SerializeField] private GameObject bladePrefab;
+    [SerializeField] private GameObject blade;
+    private Transform bladeParent;
+    private Vector3 bladePrevPos;
+    private Quaternion bladePrevRot;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,8 +55,8 @@ public class Grapple : MonoBehaviour
         {
             transform.position = pCollider.transform.position;
         }
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            combatMode = !combatMode;
+        //if (Input.GetKeyDown(KeyCode.Mouse0))
+        //    combatMode = !combatMode;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             
@@ -64,26 +70,26 @@ public class Grapple : MonoBehaviour
                 isGrappled = false;
                 grappleFired = false;
                 grappledObj = null;
-                grappleHook.transform.position = pCollider.transform.position;
+                ResetGrapple();
             }
             else
             {
                 isGrappled = false;
                 grappleFired = false;
                 grappledObj = null;
-                grappleHook.transform.position = pCollider.transform.position;
+                ResetGrapple();
             }
         }
         if(grappledObj != null)
         {
-            if (Input.GetKeyDown(KeyCode.Q) && !pullingObject && !pullingToObject && grappledObj.tag != "PullTo" )
+            if ((Input.GetKeyDown(KeyCode.Q) || Input.mouseScrollDelta.y < 0) && !pullingObject && !pullingToObject && grappledObj.tag != "PullTo" )
             {
                 if (isGrappled)
                 {
                     StartCoroutine(PullObjectTowards());
                 }
             }
-            if (Input.GetKeyDown(KeyCode.E) && !pullingObject && !pullingToObject && grappledObj.tag != "Pullable" && grappledObj.tag != "BossPill")
+            if ((Input.GetKeyDown(KeyCode.E) || Input.mouseScrollDelta.y > 0) && !pullingObject && !pullingToObject && grappledObj.tag != "Pullable" && grappledObj.tag != "BossPill")
             {
                 if (isGrappled)
                 {
@@ -92,15 +98,12 @@ public class Grapple : MonoBehaviour
                 }
             }
         }
-        
         //Debug.DrawRay(transform.position, transform.up * 1000, Color.red,100);
-
-
     }
-
 
     IEnumerator PullObjectTowards()
     {
+        blade.transform.parent = grappledObj.transform;
         Vector3 offset = new Vector3(0, 2, 0);
         pullingObject = true;
         while (true)
@@ -128,8 +131,7 @@ public class Grapple : MonoBehaviour
             grappledObj.transform.position -= dir.normalized * timePerGrappleMovement;
         }
         grappleFired = false;
-        // Resets grapple
-        grappleHook.transform.position = pCollider.transform.position;
+        ResetGrapple();
     }
     IEnumerator PullToPosition()
     {
@@ -159,13 +161,12 @@ public class Grapple : MonoBehaviour
             parent.transform.position += dir.normalized * timePerGrappleMovement;
             //print(dir.normalized * timePerGrappleMovement);
         }
-        //Resets Grapple
         grappleFired = false;
-        grappleHook.transform.position = pCollider.transform.position;
+        ResetGrapple();
     }
 
    
-    void ShootGrapple()
+    private void ShootGrapple()
     {
         if (grappleFinder.shortestObj == null)
         {
@@ -176,12 +177,32 @@ public class Grapple : MonoBehaviour
             grappleFired = true;
             grappledObj = grappleFinder.shortestObj;
             grappleHook.transform.position = grappledObj.transform.position;
+
+            // blade launch effect
+            bladePrevRot = blade.transform.localRotation;
+            bladePrevPos = blade.transform.localPosition;
+            blade.transform.position = grappledObj.transform.position;
+            bladeParent = blade.transform.parent;
+            blade.transform.parent = null;
+
             isGrappled = true;
             if (combatMode)
             {
                 //Do bad things to enemy here
             }
         }
+    }
+
+    private void ResetGrapple()
+    {
+        if (blade == null || blade is null || blade.Equals(default(GameObject)))
+            blade = Instantiate(bladePrefab);
+
+        grappleHook.transform.position = pCollider.transform.position;
+        blade.transform.parent = bladeParent;
+        blade.transform.localPosition = bladePrevPos;
+        blade.transform.localRotation = bladePrevRot;
+        //blade.transform.rotation = bladeParent.transform.rotation;
     }
     
     private void OnCollisionEnter(Collision other)

@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float maxHealth = 100.0f;
     [SerializeField] public float DamagePerSecond { get; private set; } = 200.0f;
     [SerializeField] private UIMiddleman ui;
-    [SerializeField] private Light sawLight;
+    [SerializeField] public Light sawLight;
     PlayerController pc;
     private float health;
     public float HeatLevel { get; private set; } = 0.0f;

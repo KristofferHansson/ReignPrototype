@@ -19,7 +19,11 @@ public class PlayerController : MonoBehaviour
     private GameObject heldObject;
     private Enemy heldEnemy;
     private bool bladeExtended = false;
+    private bool attacking = false;
+    private bool comboSweetspot = false;
+    private bool secondHitActivated = false;
     private float bladeDistance = 0.0f;
+    private float timeOfLastAttack = -1.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -50,27 +54,26 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             x += 1.0f;
 
-        // Non-movement key inputs
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //    lvl.EHQuit();
-        //if (Input.GetKeyDown(KeyCode.BackQuote))
-        //    lvl.EHRestart();
-        //if (Input.GetKeyDown(KeyCode.M))
-        //    lvl.EHToggleMute();
-
         /// Attacking
-        if (Input.GetMouseButtonDown(1))
-        {
-            print("attacking... ahhh");
-            attackTrigger.SetActive(true);
-            Invoke("DisableAttackTrigger", 0.4f);
-        }
+        //if (!attacking && Time.time - timeOfLastAttack > 0.8f && Input.GetMouseButtonDown(1))
+        //{
+        //    timeOfLastAttack = Time.time;
+        //    attacking = true;
+        //    attackTrigger.SetActive(true);
+        //    StartCoroutine(AnimHitOne());
+        //}
+        //else if (comboSweetspot && !secondHitActivated && Input.GetMouseButtonDown(1))
+        //{
+        //    secondHitActivated = true;
+        //}
 
         // Update movement vector
         move.x = x;
         move.z = z;
         move.Normalize();
-        move.y = Physics.gravity.y * Time.deltaTime * 2.0f;
+        move = Quaternion.Euler(0f, -45f, 0f) * move;
+        move *= move_Speed;
+        //move.y = Physics.gravity.y * Time.deltaTime * 2.0f;
         if (move.y < -3.0f)
             move.y = -3.0f;
         else if (move.y > 3.0f)
@@ -78,23 +81,22 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
+        if (!attacking)
+        {
+            // Saw direction and grappling / pulling stuff
+            // get mousepos
+            Vector3 mouse = Input.mousePosition;
+            //print(mouse);
+            mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
+            Vector3 temp = m_Rigidbody.transform.position;
+            temp.y = 0;
+            mouse.y = 0;
+            Vector3 mouseDiff = mouse - temp;
+            //print(mouse);
 
-        // Saw direction and grappling / pulling stuff
-        // get mousepos
-        Vector3 mouse = Input.mousePosition;
-        //print(mouse);
-        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
-
-
-        
-        Vector3 temp = m_Rigidbody.transform.position;
-        temp.y = 0;
-        mouse.y = 0;
-        Vector3 mouseDiff = mouse - temp;
-        //print(mouse);
-
-        // rotate saw
-        weaponHinge.transform.forward = mouseDiff;
+            // rotate saw
+            weaponHinge.transform.forward = mouseDiff;
+        }
 
         {
             /* Commenting Out Grapple Code***********************************
@@ -199,13 +201,56 @@ public class PlayerController : MonoBehaviour
             m_Rigidbody.velocity = new Vector3(0, 0, 0);
             return;
         }
-            
-        m_Rigidbody.velocity = new Vector3(move.x * move_Speed, m_Rigidbody.velocity.y, move.z * move_Speed);
-        
+
+        m_Rigidbody.velocity = new Vector3(move.x, m_Rigidbody.velocity.y, move.z);
+    }
+
+    private IEnumerator AnimHitOne()
+    {
+        // set initial pos
+        weaponHinge.transform.Rotate(new Vector3(0f, 30f, 0f));
+
+        comboSweetspot = true;
+        float amtPerInterval = -5f;
+        float totalRot = 0.0f;
+        while (totalRot < 60f)
+        {
+            weaponHinge.transform.Rotate(new Vector3(0f, amtPerInterval, 0f));
+            totalRot += Mathf.Abs(amtPerInterval);
+            yield return new WaitForSeconds(0.01f);
+        }
+        comboSweetspot = false;
+
+        if (secondHitActivated)
+        {
+            StartCoroutine(AnimHitTwo());
+        }
+        else
+        {
+            DisableAttackTrigger();
+        }
+    }
+
+    private IEnumerator AnimHitTwo()
+    {
+        secondHitActivated = false;
+        // set initial pos
+        weaponHinge.transform.Rotate(new Vector3(0f, -20f, 0f));
+
+        float amtPerInterval = 6f;
+        float totalRot = 0.0f;
+        while (totalRot < 80f)
+        {
+            weaponHinge.transform.Rotate(new Vector3(0f, amtPerInterval, 0f));
+            totalRot += Mathf.Abs(amtPerInterval);
+            yield return new WaitForSeconds(0.01f);
+        }
+        DisableAttackTrigger();
     }
 
     private void DisableAttackTrigger()
     {
+        attacking = false;
         attackTrigger.SetActive(false);
     }
 

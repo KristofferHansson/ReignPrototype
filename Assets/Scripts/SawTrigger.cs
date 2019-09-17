@@ -11,8 +11,34 @@ public class SawTrigger : MonoBehaviour
 
     void Start()
     {
+        if (!player) // New blademaster has been instantiated, probably
+        {
+            player = GameObject.Find("PlayerMaster").GetComponent<Player>();
+            player.sawLight = GameObject.Find("sawlight").GetComponent<Light>();
+        }
+
         dmg = player.DamagePerSecond / 100.0f;
     }
+
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    Enemy e;
+    //    bool eHit = false;
+
+    //    if (other.name.Equals("ECollider"))
+    //    {
+    //        // If an Enemy was hit, apply damage!
+    //        if (e = other.gameObject.GetComponentInChildren<Enemy>())
+    //            eHit = true;
+    //        else if (e = other.gameObject.GetComponentInParent<Enemy>())
+    //            eHit = true;
+    //        if (eHit)
+    //        {
+    //            //print("Damaging enemy for " + dmg + " points.");
+    //            e.TakeDamage(dmg + 30f);
+    //        }
+    //    }
+    //}
 
     void OnTriggerEnter(Collider other)
     {
