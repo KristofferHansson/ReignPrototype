@@ -6,18 +6,14 @@ public class Boss : MonoBehaviour
 {
     [SerializeField] private float health = 100;
     [SerializeField] private bool dead = false;
+    [SerializeField] private UIMiddleman ui;
     private float rotRate = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (ui is null)
+            ui = GameObject.Find("UIMaster").GetComponent<UIMiddleman>();
     }
 
     public void TakeDamage()
@@ -60,5 +56,6 @@ public class Boss : MonoBehaviour
             if (this.transform.position.y < -30.0f)
                 break;
         }
+        ui.LevelComplete();
     }
 }

@@ -30,7 +30,7 @@ public class UIMiddleman : MonoBehaviour
         Offset = new Vector2(rt.sizeDelta.x / 2f, rt.sizeDelta.y / 2f);
         gameOverPanel.SetActive(false);
         victoryPanel.SetActive(false);
-        startPanel.SetActive(true); // tutorial/intro message
+        //startPanel.SetActive(true); // tutorial/intro message
         grappleIndicator.gameObject.SetActive(false);
     }
 
