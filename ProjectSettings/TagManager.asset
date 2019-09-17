@@ -11,6 +11,7 @@ TagManager:
   - PullTo
   - BothPull
   - Fog
+  - BossPill
   layers:
   - Default
   - TransparentFX

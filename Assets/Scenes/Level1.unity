@@ -614,7 +614,7 @@ PrefabInstance:
         type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2136126222}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: Attack_Range
@@ -624,7 +624,7 @@ PrefabInstance:
         type: 3}
       propertyPath: grapple
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 348335342}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: wallParent
@@ -3666,6 +3666,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 2.220446e-16, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &348335342 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 111328782, guid: 9f8d0caa91f30514c978585872ce3b3f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2136126220}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f1df3da03949fd47a3c9b39966b4601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &351990717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4717,7 +4729,7 @@ PrefabInstance:
         type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2136126222}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: Attack_Range
@@ -4727,7 +4739,7 @@ PrefabInstance:
         type: 3}
       propertyPath: grapple
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 348335342}
     - target: {fileID: 4139046793987693437, guid: 3e94dee9013cd9446be53cdc015ef3e1,
         type: 3}
       propertyPath: wallParent
@@ -15989,7 +16001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5129aea6c1bf3f4692e10278e99fcb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camTransform: {fileID: 0}
+  camTransform: {fileID: 1450803827}
   shakeDuration: 1.5
   shakeAmount: 0.7
   decreaseFactor: 0.6
@@ -17964,6 +17976,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 780762606008921509, guid: 4dae39fa2e9349c468d2041042ec45ad,
     type: 3}
   m_PrefabInstance: {fileID: 1450371940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1450803827 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 534669905, guid: 9f8d0caa91f30514c978585872ce3b3f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2136126220}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1459758266
 PrefabInstance:

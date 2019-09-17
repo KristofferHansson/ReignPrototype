@@ -121,6 +121,7 @@ public class EnemyProj : MonoBehaviour
 
     void Die()
     {
+        
         if(grapple.grappledObj == gameObject)
         {
             //Let's player know that they are grappling on to nothing
