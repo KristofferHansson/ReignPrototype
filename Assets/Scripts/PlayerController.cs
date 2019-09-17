@@ -19,7 +19,11 @@ public class PlayerController : MonoBehaviour
     private GameObject heldObject;
     private Enemy heldEnemy;
     private bool bladeExtended = false;
+    private bool attacking = false;
+    private bool comboSweetspot = false;
+    private bool secondHitActivated = false;
     private float bladeDistance = 0.0f;
+    private float timeOfLastAttack = -1.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -59,11 +63,16 @@ public class PlayerController : MonoBehaviour
         //    lvl.EHToggleMute();
 
         /// Attacking
-        if (Input.GetMouseButtonDown(1))
+        if (!attacking && Input.GetMouseButtonDown(1))
         {
-            print("attacking... ahhh");
+            timeOfLastAttack = Time.time;
+            attacking = true;
             attackTrigger.SetActive(true);
-            Invoke("DisableAttackTrigger", 0.4f);
+            StartCoroutine(AnimHitOne());
+        }
+        else if (comboSweetspot && Input.GetMouseButtonDown(1))
+        {
+            secondHitActivated = true;
         }
 
         // Update movement vector
@@ -78,23 +87,22 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
+        if (!attacking)
+        {
+            // Saw direction and grappling / pulling stuff
+            // get mousepos
+            Vector3 mouse = Input.mousePosition;
+            //print(mouse);
+            mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
+            Vector3 temp = m_Rigidbody.transform.position;
+            temp.y = 0;
+            mouse.y = 0;
+            Vector3 mouseDiff = mouse - temp;
+            //print(mouse);
 
-        // Saw direction and grappling / pulling stuff
-        // get mousepos
-        Vector3 mouse = Input.mousePosition;
-        //print(mouse);
-        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
-
-
-        
-        Vector3 temp = m_Rigidbody.transform.position;
-        temp.y = 0;
-        mouse.y = 0;
-        Vector3 mouseDiff = mouse - temp;
-        //print(mouse);
-
-        // rotate saw
-        weaponHinge.transform.forward = mouseDiff;
+            // rotate saw
+            weaponHinge.transform.forward = mouseDiff;
+        }
 
         {
             /* Commenting Out Grapple Code***********************************
@@ -204,9 +212,54 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private IEnumerator AnimHitOne()
+    {
+        // set initial pos
+        weaponHinge.transform.Rotate(new Vector3(0f,30f,0f));
+
+        float amtPerInterval = -5f;
+        float totalRot = 0.0f;
+        while (totalRot < 60f)
+        {
+            weaponHinge.transform.Rotate(new Vector3(0f, amtPerInterval, 0f));
+            totalRot += Mathf.Abs(amtPerInterval);
+            if (totalRot >= 40f && !comboSweetspot) comboSweetspot = true;
+            yield return new WaitForSeconds(0.01f);
+        }
+        comboSweetspot = false;
+
+        if (secondHitActivated)
+        {
+            StartCoroutine(AnimHitTwo());
+        }
+        else
+        {
+            DisableAttackTrigger();
+        }
+    }
+
+    private IEnumerator AnimHitTwo()
+    {
+        secondHitActivated = false;
+        // set initial pos
+        weaponHinge.transform.Rotate(new Vector3(0f, -20f, 0f));
+
+        float amtPerInterval = 6f;
+        float totalRot = 0.0f;
+        while (totalRot < 80f)
+        {
+            weaponHinge.transform.Rotate(new Vector3(0f, amtPerInterval, 0f));
+            totalRot += Mathf.Abs(amtPerInterval);
+            yield return new WaitForSeconds(0.01f);
+        }
+        DisableAttackTrigger();
+    }
+
     private void DisableAttackTrigger()
     {
+        attacking = false;
         attackTrigger.SetActive(false);
+        //StopCoroutine(AnimHitOne());
     }
 
     public void Die()
