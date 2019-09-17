@@ -18,9 +18,10 @@ public class Boss : MonoBehaviour
 
     public void TakeDamage()
     {
-        //health += -8.34f; // for real gameplay
-        health += -20f; // for demo
-        rotRate += 1.3f;
+        health += -8.34f; // for real gameplay
+        //health += -20f; // for demo
+        //rotRate += 1.3f;
+        rotRate += 1f;
         Attack();
         if (health < 0)
             Die();

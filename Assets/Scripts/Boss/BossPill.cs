@@ -8,7 +8,7 @@ public class BossPill : MonoBehaviour
     Boss boss;
     public Grapple grapple;
     Rigidbody rb;
-    float timer = .7f;
+    float timer = .4f;
     public bool fall = false;
     public bool isFirst;
 
@@ -39,7 +39,10 @@ public class BossPill : MonoBehaviour
             timer -=  Time.deltaTime;
             if(timer < 0)
             {
-                
+                grapple.grappledObj = null;
+                grapple.isGrappled = false;
+                grapple.pullingObject = false;
+                grapple.pullingToObject = false;
                 //Meaning The first pill to go
                 if (isFirst)
                 {

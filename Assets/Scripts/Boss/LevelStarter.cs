@@ -7,7 +7,7 @@ public class LevelStarter : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private GameObject axe1;
     [SerializeField] private GameObject axe2;
-
+    [SerializeField] private GameObject platform;
     GameObject boss;
     GameObject player;
     bool playerStoppedWalking = false;
@@ -52,7 +52,7 @@ public class LevelStarter : MonoBehaviour
         
         if(playerStoppedWalking && !bossEntered)
         {
-            
+            Destroy(platform);
             cameraShake.enabled = true;
             //print("In here");
             boss.transform.position += new Vector3(0, 2, 0) * speed * Time.deltaTime;
