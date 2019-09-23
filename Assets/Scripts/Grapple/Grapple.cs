@@ -27,7 +27,9 @@ public class Grapple : MonoBehaviour
     Player player;
 
     [SerializeField] private GameObject bladePrefab;
+    [SerializeField] private GameObject skeleBlade;
     [SerializeField] private GameObject blade;
+    [SerializeField] private PlayerController pc;
     private Transform bladeParent;
     private Vector3 bladePrevPos;
     private Quaternion bladePrevRot;
@@ -179,9 +181,14 @@ public class Grapple : MonoBehaviour
             grappleHook.transform.position = grappledObj.transform.position;
 
             // blade launch effect
-            bladePrevRot = blade.transform.localRotation;
-            bladePrevPos = blade.transform.localPosition;
+            if (blade == null || blade is null || blade.Equals(default(GameObject)))
+                blade = Instantiate(bladePrefab);
+
+            //bladePrevRot = blade.transform.localRotation;
+            //bladePrevPos = blade.transform.localPosition;
+            skeleBlade.SetActive(false);
             blade.transform.position = grappledObj.transform.position;
+            blade.transform.rotation = pc.GetWeaponHinge().transform.rotation;
             bladeParent = blade.transform.parent;
             blade.transform.parent = null;
 
@@ -195,14 +202,16 @@ public class Grapple : MonoBehaviour
 
     private void ResetGrapple()
     {
-        if (blade == null || blade is null || blade.Equals(default(GameObject)))
-            blade = Instantiate(bladePrefab);
+        //if (blade == null || blade is null || blade.Equals(default(GameObject)))
+        //    blade = Instantiate(bladePrefab);
 
+        Destroy(blade);
         grappleHook.transform.position = pCollider.transform.position;
-        blade.transform.parent = bladeParent;
-        blade.transform.localPosition = bladePrevPos;
-        blade.transform.localRotation = bladePrevRot;
-        //blade.transform.rotation = bladeParent.transform.rotation;
+        skeleBlade.SetActive(true);
+        //blade.transform.parent = bladeParent;
+        //blade.transform.localPosition = bladePrevPos;
+        //blade.transform.localRotation = bladePrevRot;
+        ////blade.transform.rotation = bladeParent.transform.rotation;
     }
     
     private void OnCollisionEnter(Collision other)

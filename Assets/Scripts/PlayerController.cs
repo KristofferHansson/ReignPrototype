@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private Transform camRig;
-    [SerializeField] private GameObject attackTrigger;
+    //[SerializeField] private GameObject attackTrigger;
+    [SerializeField] private SawTrigger saw;
+    [SerializeField] private Animator sawAnims;
 
     public Grapple grapple;
     private Player player;
@@ -19,9 +21,11 @@ public class PlayerController : MonoBehaviour
     private GameObject heldObject;
     private Enemy heldEnemy;
     private bool bladeExtended = false;
-    private bool attacking = false;
+    //private bool attacking = false;
     private bool comboSweetspot = false;
+    private bool firstHitActivated = false;
     private bool secondHitActivated = false;
+    private bool thirdHitActivated = false;
     private float bladeDistance = 0.0f;
     private float timeOfLastAttack = -1.0f;
 
@@ -33,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
         player = playerMaster.GetComponent<Player>();
         m_Rigidbody = GetComponent<Rigidbody>();
+
+        //attackTrigger.SetActive(false);
     }
 
     // Update is called once per frame
@@ -55,17 +61,31 @@ public class PlayerController : MonoBehaviour
             x += 1.0f;
 
         /// Attacking
-        //if (!attacking && Time.time - timeOfLastAttack > 0.8f && Input.GetMouseButtonDown(1))
-        //{
-        //    timeOfLastAttack = Time.time;
-        //    attacking = true;
-        //    attackTrigger.SetActive(true);
-        //    StartCoroutine(AnimHitOne());
-        //}
-        //else if (comboSweetspot && !secondHitActivated && Input.GetMouseButtonDown(1))
-        //{
-        //    secondHitActivated = true;
-        //}
+        //if (attacking && Time.time - timeOfLastAttack > 1.5f)
+        //    attacking = false;
+        float diff = Time.time - timeOfLastAttack;
+        if (firstHitActivated && diff > 1.0f)
+        {
+            print("resetting attack timers");
+            firstHitActivated = secondHitActivated = thirdHitActivated = false;
+        }
+        if (!firstHitActivated && Input.GetMouseButtonDown(1))
+        {
+            print("first combo hit");
+            Attack1();
+        }
+        else if (!secondHitActivated && diff < 1.0f && Input.GetMouseButtonDown(1))
+        {
+            //print(sawAnims.GetCurrentAnimatorStateInfo();
+            print("second combo hit");
+            Attack2();
+        }
+        else if (!thirdHitActivated && diff < 1.0f && Input.GetMouseButtonDown(1))
+        {
+            print("third combo hit");
+            Attack3();
+            sawAnims.SetTrigger("attack3");
+        }
 
         // Update movement vector
         move.x = x;
@@ -81,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
-        if (!attacking)
+        //if (!attacking)
         {
             // Saw direction and grappling / pulling stuff
             // get mousepos
@@ -206,6 +226,7 @@ public class PlayerController : MonoBehaviour
         //print(m_Rigidbody.velocity);
     }
 
+    /*
     private IEnumerator AnimHitOne()
     {
         // set initial pos
@@ -247,12 +268,44 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         DisableAttackTrigger();
+    }*/
+
+    private void Attack1()
+    {
+        timeOfLastAttack = Time.time;
+        //attacking = true;
+        firstHitActivated = true;
+        sawAnims.SetTrigger("attack1");
+        saw.DealDamage();
+        //attackTrigger.SetActive(true);
+        Invoke("DisableAttackTrigger", 0.1f);
+    }
+    private void Attack2()
+    {
+        timeOfLastAttack = Time.time;
+        //attacking = true;
+        secondHitActivated = true;
+        sawAnims.SetTrigger("attack2");
+        saw.DealDamage(1.1f);
+        //attackTrigger.SetActive(true);
+        //CancelInvoke("DisableAttackTrigger");
+        Invoke("DisableAttackTrigger", 0.1f);
+    }
+    private void Attack3()
+    {
+        timeOfLastAttack = Time.time;
+        //attacking = true;
+        thirdHitActivated = true;
+        sawAnims.SetTrigger("attack3");
+        saw.DealDamage(1.5f);
+        //attackTrigger.SetActive(true);
+        //CancelInvoke("DisableAttackTrigger");
+        Invoke("DisableAttackTrigger", 0.1f);
     }
 
     private void DisableAttackTrigger()
     {
-        attacking = false;
-        attackTrigger.SetActive(false);
+        //attackTrigger.SetActive(false);
     }
 
     public void Die()
@@ -260,5 +313,10 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody.constraints = RigidbodyConstraints.None;
         Camera.main.transform.parent = null;
         this.enabled = false;
+    }
+
+    public GameObject GetWeaponHinge()
+    {
+        return weaponHinge;
     }
 }
