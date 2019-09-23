@@ -532,7 +532,7 @@ GameObject:
   - component: {fileID: 5300590532223282960}
   - component: {fileID: 5300590532223282961}
   m_Layer: 0
-  m_Name: PlayerMasterSkeletal
+  m_Name: PlayerMaster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1100,6 +1100,11 @@ PrefabInstance:
       propertyPath: skeleBlade
       value: 
       objectReference: {fileID: 3727341156404908409}
+    - target: {fileID: 3254070028382513600, guid: 306e4c54bc372f3448cdc452b8f4d802,
+        type: 3}
+      propertyPath: bladeLight
+      value: 
+      objectReference: {fileID: 1623590950785648432}
     - target: {fileID: 3254070028382513614, guid: 306e4c54bc372f3448cdc452b8f4d802,
         type: 3}
       propertyPath: m_Enabled

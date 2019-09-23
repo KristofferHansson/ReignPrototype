@@ -3951,7 +3951,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 22.09, y: 19.66}
-  m_SizeDelta: {x: 476.24, y: 81.32}
+  m_SizeDelta: {x: 600, y: 81.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571637889
 MonoBehaviour:
@@ -3966,7 +3966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8301887, g: 0.008387607, b: 0, a: 1}
+  m_Color: {r: 0.83137256, g: 0, b: 0.18391705, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3984,7 +3984,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The Fog is Rising!!
+  m_Text: The Lethal Fog is Rising!
 --- !u!222 &571637890
 CanvasRenderer:
   m_ObjectHideFlags: 0

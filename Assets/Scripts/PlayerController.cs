@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool secondHitActivated = false;
     private bool thirdHitActivated = false;
     private float bladeDistance = 0.0f;
+    private float timeOfFirstAttack = 0.0f;
     private float timeOfLastAttack = -1.0f;
 
     // Start is called before the first frame update
@@ -64,7 +65,7 @@ public class PlayerController : MonoBehaviour
         //if (attacking && Time.time - timeOfLastAttack > 1.5f)
         //    attacking = false;
         float diff = Time.time - timeOfLastAttack;
-        if (firstHitActivated && diff > 1.0f)
+        if (firstHitActivated && diff > 1.0f) // reset attack timer
         {
             print("resetting attack timers");
             firstHitActivated = secondHitActivated = thirdHitActivated = false;
@@ -273,6 +274,7 @@ public class PlayerController : MonoBehaviour
     private void Attack1()
     {
         timeOfLastAttack = Time.time;
+        timeOfFirstAttack = timeOfLastAttack;
         //attacking = true;
         firstHitActivated = true;
         sawAnims.SetTrigger("attack1");
@@ -286,7 +288,11 @@ public class PlayerController : MonoBehaviour
         //attacking = true;
         secondHitActivated = true;
         sawAnims.SetTrigger("attack2");
-        saw.DealDamage(1.1f);
+        //saw.DealDamage(1.1f);
+        float delay = (0.5f + timeOfFirstAttack) - Time.time;
+        if (delay < 0.0f) delay = 0.01f;
+        float[] mad = { 1.1f, delay };
+        StartCoroutine("DealDamage", mad);
         //attackTrigger.SetActive(true);
         //CancelInvoke("DisableAttackTrigger");
         Invoke("DisableAttackTrigger", 0.1f);
@@ -297,12 +303,20 @@ public class PlayerController : MonoBehaviour
         //attacking = true;
         thirdHitActivated = true;
         sawAnims.SetTrigger("attack3");
-        saw.DealDamage(1.5f);
+        //saw.DealDamage(1.5f);
+        float delay = (1.5f + timeOfFirstAttack) - Time.time;
+        if (delay < 0.0f) delay = 0.01f;
+        float[] mad = { 1.5f, delay };
+        StartCoroutine("DealDamage", mad);
         //attackTrigger.SetActive(true);
         //CancelInvoke("DisableAttackTrigger");
         Invoke("DisableAttackTrigger", 0.1f);
     }
-
+    private IEnumerator DealDamage(float[] multiplierAndDelay)
+    {
+        yield return new WaitForSeconds(multiplierAndDelay[1]);
+        saw.DealDamage(multiplierAndDelay[0]);
+    }
     private void DisableAttackTrigger()
     {
         //attackTrigger.SetActive(false);

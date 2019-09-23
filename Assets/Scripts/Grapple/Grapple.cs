@@ -26,13 +26,15 @@ public class Grapple : MonoBehaviour
     Player player;
 
     [SerializeField] private GameObject bladePrefab;
-    [SerializeField] private GameObject skeleBlade;
+    [SerializeField] private GameObject skeleBlade; // to disable when grapple out
+    [SerializeField] private Light bladeLight; // to disable when grapple out
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman uiMiddleMan;
     [SerializeField] private PlayerController pc;
-    private Transform bladeParent;
-    private Vector3 bladePrevPos;
-    private Quaternion bladePrevRot;
+    //private Transform bladeParent;
+    //private Vector3 bladePrevPos;
+    //private Quaternion bladePrevRot;
+    private float prevIntensity = -1.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -190,9 +192,11 @@ public class Grapple : MonoBehaviour
             //bladePrevRot = blade.transform.localRotation;
             //bladePrevPos = blade.transform.localPosition;
             skeleBlade.SetActive(false);
+            prevIntensity = bladeLight.intensity;
+            bladeLight.intensity = 0.0f;
             blade.transform.position = grappledObj.transform.position;
             blade.transform.rotation = pc.GetWeaponHinge().transform.rotation;
-            bladeParent = blade.transform.parent;
+            //bladeParent = blade.transform.parent;
             blade.transform.parent = null;
 
             isGrappled = true;
@@ -211,6 +215,7 @@ public class Grapple : MonoBehaviour
         Destroy(blade);
         grappleHook.transform.position = pCollider.transform.position;
         skeleBlade.SetActive(true);
+        bladeLight.intensity = prevIntensity;
         //blade.transform.parent = bladeParent;
         //blade.transform.localPosition = bladePrevPos;
         //blade.transform.localRotation = bladePrevRot;
