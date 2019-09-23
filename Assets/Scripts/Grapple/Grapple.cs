@@ -23,12 +23,12 @@ public class Grapple : MonoBehaviour
     GrappleFinder grappleFinder;
     public GameObject grappledObj;
     public GameObject pCollider;
-    public UIMiddleman uiMiddleMan;
     Player player;
 
     [SerializeField] private GameObject bladePrefab;
     [SerializeField] private GameObject skeleBlade;
     [SerializeField] private GameObject blade;
+    [SerializeField] private UIMiddleman uiMiddleMan;
     [SerializeField] private PlayerController pc;
     private Transform bladeParent;
     private Vector3 bladePrevPos;
@@ -37,6 +37,9 @@ public class Grapple : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (uiMiddleMan is null)
+            uiMiddleMan = GameObject.Find("UIMaster").GetComponent<UIMiddleman>();
+
         parent = GameObject.Find("PlayerMaster");
         pCollider = GameObject.Find("PCollider");
         grappleFinder = GetComponentInChildren<GrappleFinder>();

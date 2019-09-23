@@ -6,7 +6,7 @@ public class GrappleFinder : MonoBehaviour
 {
 
     public GameObject shortestObj;
-    public GameObject player;
+    [SerializeField] private GameObject player;
     Grapple grapple;
     public
     float shortestDistance = Mathf.Infinity;
