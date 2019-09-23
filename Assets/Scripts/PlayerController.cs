@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private Transform camRig;
-    //[SerializeField] private GameObject attackTrigger;
     [SerializeField] private SawTrigger saw;
     [SerializeField] private Animator sawAnims;
 
@@ -21,8 +20,6 @@ public class PlayerController : MonoBehaviour
     private GameObject heldObject;
     private Enemy heldEnemy;
     private bool bladeExtended = false;
-    //private bool attacking = false;
-    private bool comboSweetspot = false;
     private bool firstHitActivated = false;
     private bool secondHitActivated = false;
     private bool thirdHitActivated = false;
@@ -62,8 +59,6 @@ public class PlayerController : MonoBehaviour
             x += 1.0f;
 
         /// Attacking
-        //if (attacking && Time.time - timeOfLastAttack > 1.5f)
-        //    attacking = false;
         float diff = Time.time - timeOfLastAttack;
         if (firstHitActivated && diff > 1.0f) // reset attack timer
         {
@@ -77,7 +72,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (!secondHitActivated && diff < 1.0f && Input.GetMouseButtonDown(1))
         {
-            //print(sawAnims.GetCurrentAnimatorStateInfo();
             print("second combo hit");
             Attack2();
         }
@@ -85,7 +79,6 @@ public class PlayerController : MonoBehaviour
         {
             print("third combo hit");
             Attack3();
-            sawAnims.SetTrigger("attack3");
         }
 
         // Update movement vector
@@ -227,99 +220,38 @@ public class PlayerController : MonoBehaviour
         //print(m_Rigidbody.velocity);
     }
 
-    /*
-    private IEnumerator AnimHitOne()
-    {
-        // set initial pos
-        weaponHinge.transform.Rotate(new Vector3(0f, 30f, 0f));
-
-        comboSweetspot = true;
-        float amtPerInterval = -5f;
-        float totalRot = 0.0f;
-        while (totalRot < 60f)
-        {
-            weaponHinge.transform.Rotate(new Vector3(0f, amtPerInterval, 0f));
-            totalRot += Mathf.Abs(amtPerInterval);
-            yield return new WaitForSeconds(0.01f);
-        }
-        comboSweetspot = false;
-
-        if (secondHitActivated)
-        {
-            StartCoroutine(AnimHitTwo());
-        }
-        else
-        {
-            DisableAttackTrigger();
-        }
-    }
-
-    private IEnumerator AnimHitTwo()
-    {
-        secondHitActivated = false;
-        // set initial pos
-        weaponHinge.transform.Rotate(new Vector3(0f, -20f, 0f));
-
-        float amtPerInterval = 6f;
-        float totalRot = 0.0f;
-        while (totalRot < 80f)
-        {
-            weaponHinge.transform.Rotate(new Vector3(0f, amtPerInterval, 0f));
-            totalRot += Mathf.Abs(amtPerInterval);
-            yield return new WaitForSeconds(0.01f);
-        }
-        DisableAttackTrigger();
-    }*/
-
     private void Attack1()
     {
         timeOfLastAttack = Time.time;
         timeOfFirstAttack = timeOfLastAttack;
-        //attacking = true;
         firstHitActivated = true;
         sawAnims.SetTrigger("attack1");
         saw.DealDamage();
-        //attackTrigger.SetActive(true);
-        Invoke("DisableAttackTrigger", 0.1f);
     }
     private void Attack2()
     {
         timeOfLastAttack = Time.time;
-        //attacking = true;
         secondHitActivated = true;
         sawAnims.SetTrigger("attack2");
-        //saw.DealDamage(1.1f);
         float delay = (0.5f + timeOfFirstAttack) - Time.time;
         if (delay < 0.0f) delay = 0.01f;
         float[] mad = { 1.1f, delay };
         StartCoroutine("DealDamage", mad);
-        //attackTrigger.SetActive(true);
-        //CancelInvoke("DisableAttackTrigger");
-        Invoke("DisableAttackTrigger", 0.1f);
     }
     private void Attack3()
     {
         timeOfLastAttack = Time.time;
-        //attacking = true;
         thirdHitActivated = true;
         sawAnims.SetTrigger("attack3");
-        //saw.DealDamage(1.5f);
         float delay = (1.5f + timeOfFirstAttack) - Time.time;
         if (delay < 0.0f) delay = 0.01f;
         float[] mad = { 1.5f, delay };
         StartCoroutine("DealDamage", mad);
-        //attackTrigger.SetActive(true);
-        //CancelInvoke("DisableAttackTrigger");
-        Invoke("DisableAttackTrigger", 0.1f);
     }
     private IEnumerator DealDamage(float[] multiplierAndDelay)
     {
         yield return new WaitForSeconds(multiplierAndDelay[1]);
         saw.DealDamage(multiplierAndDelay[0]);
-    }
-    private void DisableAttackTrigger()
-    {
-        //attackTrigger.SetActive(false);
     }
 
     public void Die()
