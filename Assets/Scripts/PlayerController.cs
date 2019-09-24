@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
         /// Attacking
         float diff = Time.time - timeOfLastAttack;
-        if (firstHitActivated && diff > 1.1f) // reset attack timer
+        if (firstHitActivated && diff > 0.6f) // reset attack timer
         {
             print("resetting attack timers");
             firstHitActivated = secondHitActivated = thirdHitActivated = false;
@@ -70,12 +70,12 @@ public class PlayerController : MonoBehaviour
             print("first combo hit");
             Attack1();
         }
-        else if (!secondHitActivated && diff < 0.66f && Input.GetMouseButtonDown(1))
+        else if (!secondHitActivated && diff < 0.4f && Input.GetMouseButtonDown(1))
         {
             print("second combo hit");
             Attack2();
         }
-        else if (!thirdHitActivated && diff < 0.66f && Input.GetMouseButtonDown(1))
+        else if (!thirdHitActivated && diff < 0.4f && Input.GetMouseButtonDown(1))
         {
             print("third combo hit");
             Attack3();
@@ -233,7 +233,7 @@ public class PlayerController : MonoBehaviour
         timeOfLastAttack = Time.time;
         secondHitActivated = true;
         sawAnims.SetTrigger("attack2");
-        float delay = (0.5f + timeOfFirstAttack) - Time.time;
+        float delay = (0.4f + timeOfFirstAttack) - Time.time;
         if (delay < 0.0f) delay = 0.01f;
         float[] mad = { 1.1f, delay };
         StartCoroutine("DealDamage", mad);
@@ -243,7 +243,7 @@ public class PlayerController : MonoBehaviour
         timeOfLastAttack = Time.time;
         thirdHitActivated = true;
         sawAnims.SetTrigger("attack3");
-        float delay = (1.1f + timeOfFirstAttack) - Time.time;
+        float delay = (0.9f + timeOfFirstAttack) - Time.time;
         if (delay < 0.0f) delay = 0.01f;
         float[] mad = { 1.5f, delay };
         StartCoroutine("DealDamage", mad);
