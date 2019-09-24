@@ -9,12 +9,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float maxSpeed = 5.0f; // max speed
     [SerializeField] private Transform player;
     [SerializeField] private Collider hitbox; // disable upon dead
-    [SerializeField] private Slider healthBarPrefab; // create bar in UI upon spawn
+    [SerializeField] private GameObject healthBarPrefab; // create bar in UI upon spawn
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private ILevelScript lvl;
     [SerializeField] private GameObject eyes;
     private float speed;
-    private Slider healthBar; // to update fill of bar
+    private EnemyHPUI healthBar; // to update fill of bar
     private RectTransform hbTransform; // to update position of bar
     private float health;
     private Rigidbody rb;
@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
         }
 
         // instantiate health bar UI Slider
-        healthBar = Instantiate(healthBarPrefab);
+        healthBar = Instantiate(healthBarPrefab).GetComponent<EnemyHPUI>();
         healthBar.transform.SetParent(GameObject.Find("UIPanel").transform, false);
         hbTransform = healthBar.GetComponent<RectTransform>();
         UpdateHealthBarLocation();
@@ -84,8 +84,8 @@ public class Enemy : MonoBehaviour
         //print("Enemy " + gameObject.name + " health is " + health + "."); // convert to healthbar
         // update healthBar fill value
         float fracRemaining = health / maxHealth;
-        if (fracRemaining < 0) fracRemaining = 0;
-        healthBar.value = fracRemaining;
+        if (fracRemaining <= 0) fracRemaining = 0;
+        healthBar.SetValue(fracRemaining);
 
         if (health <= 0)
         {

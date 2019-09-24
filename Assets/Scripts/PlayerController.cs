@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
         /// Attacking
         float diff = Time.time - timeOfLastAttack;
-        if (firstHitActivated && diff > 0.6f) // reset attack timer
+        if (firstHitActivated && diff > 0.4f) // reset attack timer
         {
             print("resetting attack timers");
             firstHitActivated = secondHitActivated = thirdHitActivated = false;
@@ -233,7 +233,7 @@ public class PlayerController : MonoBehaviour
         timeOfLastAttack = Time.time;
         secondHitActivated = true;
         sawAnims.SetTrigger("attack2");
-        float delay = (0.4f + timeOfFirstAttack) - Time.time;
+        float delay = (0.3f + timeOfFirstAttack) - Time.time;
         if (delay < 0.0f) delay = 0.01f;
         float[] mad = { 1.1f, delay };
         StartCoroutine("DealDamage", mad);

@@ -57,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd28a77c8340c044bd429407e0fb6db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dmg: 10
 --- !u!1 &543472731842944332
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +124,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -215,7 +217,7 @@ MonoBehaviour:
   maxSpeed: 10
   player: {fileID: 0}
   hitbox: {fileID: 543472730898809097}
-  healthBarPrefab: {fileID: 4861286085598730156, guid: 67a360c821605be4181600cd0ceb1648,
+  healthBarPrefab: {fileID: 4861286085598730154, guid: 67a360c821605be4181600cd0ceb1648,
     type: 3}
   ui: {fileID: 0}
   eyes: {fileID: 0}

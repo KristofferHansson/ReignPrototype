@@ -188,14 +188,13 @@ public class Grapple : MonoBehaviour
             // blade launch effect
             if (blade == null || blade is null || blade.Equals(default(GameObject)))
                 blade = Instantiate(bladePrefab);
-
             //bladePrevRot = blade.transform.localRotation;
             //bladePrevPos = blade.transform.localPosition;
             skeleBlade.SetActive(false);
             prevIntensity = bladeLight.intensity;
             bladeLight.intensity = 0.0f;
-            blade.transform.position = grappledObj.transform.position;
             blade.transform.rotation = pc.GetWeaponHinge().transform.rotation;
+            blade.transform.position = grappledObj.transform.position - blade.transform.forward * 4.5f;
             //bladeParent = blade.transform.parent;
             blade.transform.parent = null;
 
