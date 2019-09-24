@@ -69,13 +69,18 @@ public class SawTrigger : MonoBehaviour
     // Multiply the saw's base damage by multiplier
     public void DealDamage(float multiplier = 1.0f)
     {
+        int enemiesHit = 0;
+
         foreach (Enemy e in enemiesToDamage)
         {
             if (e is null || e == null || e.Equals(default(Enemy))) { continue; }
 
+            enemiesHit++;
             e.KnockBack();
             e.TakeDamage((dmg + 30f) * multiplier);
         }
+        if (enemiesHit > 0)
+            player.IncreaseHeat();
     }
 
     /// Continuous damage on saw location version of attacking
