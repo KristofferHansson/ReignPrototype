@@ -8467,7 +8467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5129aea6c1bf3f4692e10278e99fcb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camTransform: {fileID: 0}
+  camTransform: {fileID: 1181973582}
   shakeDuration: 3
   shakeAmount: 0.3
   decreaseFactor: 1
@@ -8845,6 +8845,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06da832b4ea57244abb8a5c3b147f343, type: 3}
+--- !u!4 &1181973582 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4522988116944019782, guid: 1b4a0c16f361b0b45a4cea2d2feee26a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1308537238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1194052608 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 780762606008921505, guid: 4dae39fa2e9349c468d2041042ec45ad,

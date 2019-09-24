@@ -71,6 +71,9 @@ public class SawTrigger : MonoBehaviour
     {
         foreach (Enemy e in enemiesToDamage)
         {
+            if (e is null || e == null || e.Equals(default(Enemy))) { continue; }
+
+            e.KnockBack();
             e.TakeDamage((dmg + 30f) * multiplier);
         }
     }

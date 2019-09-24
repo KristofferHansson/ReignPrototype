@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private float health;
     private Rigidbody rb;
     private bool dead = false;
+    private bool knockedBack = false;
     private bool killZed = false;
 
     // Start is called before the first frame update
@@ -65,7 +66,7 @@ public class Enemy : MonoBehaviour
         transform.LookAt(player);
         if (Vector3.Distance(transform.position, player.position) >= 1.2f)
         {
-            if (!dead) // GameObj position
+            if (!dead && !knockedBack) // GameObj position
             {
                 transform.position += transform.forward * speed * Time.deltaTime;
             }
@@ -97,6 +98,23 @@ public class Enemy : MonoBehaviour
             // Delayed death actions
             Invoke("Die", 0.8f);
         }
+    }
+
+    public void KnockBack()
+    {
+        StartCoroutine(MoveBackOverTime());
+    }
+    private IEnumerator MoveBackOverTime()
+    {
+        knockedBack = true;
+        for (int i = 0; i < 4; i++) { // move back for 4 frames
+            this.transform.position += this.transform.forward * -20.0f * Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        for (int i = 0; i < 11; i++) { // stun for 11 frames
+            yield return new WaitForEndOfFrame();
+        }
+        knockedBack = false;
     }
 
     // amt = points to be dealt every 0.01 seconds
