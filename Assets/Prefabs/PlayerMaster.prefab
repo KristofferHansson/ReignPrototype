@@ -699,7 +699,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5300590532223282974}
   - component: {fileID: 5300590532223282963}
-  - component: {fileID: 5300590532223282960}
+  - component: {fileID: -645214761780902493}
   - component: {fileID: 5300590532223282961}
   m_Layer: 0
   m_Name: PlayerMaster
@@ -743,7 +743,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &5300590532223282960
+--- !u!114 &-645214761780902493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -752,7 +752,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5300590532223282975}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b94d6a143cd0ff3428828a520ea237ba, type: 3}
+  m_Script: {fileID: 11500000, guid: deabc93b1d9ca624b91ff873ca6c47e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   move_Speed: 15
@@ -1260,7 +1260,7 @@ PrefabInstance:
         type: 3}
       propertyPath: pc
       value: 
-      objectReference: {fileID: 5300590532223282960}
+      objectReference: {fileID: 0}
     - target: {fileID: 3254070028382513600, guid: 306e4c54bc372f3448cdc452b8f4d802,
         type: 3}
       propertyPath: skeleBlade
@@ -1271,22 +1271,22 @@ PrefabInstance:
       propertyPath: bladeLight
       value: 
       objectReference: {fileID: 1623590950785648432}
-    - target: {fileID: 3254070028382513614, guid: 306e4c54bc372f3448cdc452b8f4d802,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3254070028382513601, guid: 306e4c54bc372f3448cdc452b8f4d802,
         type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3254070028329490692, guid: 306e4c54bc372f3448cdc452b8f4d802,
+    - target: {fileID: 3254070028382513614, guid: 306e4c54bc372f3448cdc452b8f4d802,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3254070028579853961, guid: 306e4c54bc372f3448cdc452b8f4d802,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3254070028329490692, guid: 306e4c54bc372f3448cdc452b8f4d802,
         type: 3}
       propertyPath: m_Enabled
       value: 0

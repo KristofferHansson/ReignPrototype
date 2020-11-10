@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerWITHCOMBOCOMBAT : MonoBehaviour
 {
     [SerializeField] private float move_Speed = 1.0f;
     [SerializeField] private GameObject playerMaster;
@@ -58,6 +58,29 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             x += 1.0f;
 
+        /// Attacking
+        float diff = Time.time - timeOfLastAttack;
+        if (firstHitActivated && diff > 0.4f) // reset attack timer
+        {
+            print("resetting attack timers");
+            firstHitActivated = secondHitActivated = thirdHitActivated = false;
+        }
+        if (!firstHitActivated && Input.GetMouseButtonDown(1))
+        {
+            print("first combo hit");
+            Attack1();
+        }
+        else if (!secondHitActivated && diff < 0.4f && Input.GetMouseButtonDown(1))
+        {
+            print("second combo hit");
+            Attack2();
+        }
+        else if (!thirdHitActivated && diff < 0.4f && Input.GetMouseButtonDown(1))
+        {
+            print("third combo hit");
+            Attack3();
+        }
+
         // Update movement vector
         move.x = x;
         move.z = z;
@@ -72,21 +95,25 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
-        // Saw direction and grappling / pulling stuff
-        // get mousepos
-        Vector3 mouse = Input.mousePosition;
-        //print(mouse);
-        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
-        Vector3 temp = m_Rigidbody.transform.position;
-        temp.y = 0;
-        mouse.y = 0;
-        Vector3 mouseDiff = mouse - temp;
-        //print(mouse);
+        //if (!attacking)
+        {
+            // Saw direction and grappling / pulling stuff
+            // get mousepos
+            Vector3 mouse = Input.mousePosition;
+            //print(mouse);
+            mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
+            Vector3 temp = m_Rigidbody.transform.position;
+            temp.y = 0;
+            mouse.y = 0;
+            Vector3 mouseDiff = mouse - temp;
+            //print(mouse);
 
-        // rotate saw
-        weaponHinge.transform.forward = mouseDiff;
+            // rotate saw
+            weaponHinge.transform.forward = mouseDiff;
+        }
 
         {
+            /* Commenting Out Grapple Code***********************************
             if (heldObject && Input.GetMouseButtonDown(1))
             {// drop object if held
                 heldObject.GetComponent<Rigidbody>().isKinematic = false;
@@ -115,7 +142,7 @@ public class PlayerController : MonoBehaviour
                     }
 
                     Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                    if (objHit && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))) // GRAPPLE movement command
+                    if (objHit && Input.GetMouseButtonDown(0)) // GRAPPLE movement command
                     {
                         playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
                     }
@@ -166,6 +193,7 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
+            */
         }
     }
 
@@ -182,12 +210,17 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        if (grapple.pullingObject || grapple.pullingToObject)
+        {
+            m_Rigidbody.velocity = new Vector3(0, 0, 0);
+            return;
+        }
+
         m_Rigidbody.velocity = new Vector3(move.x, m_Rigidbody.velocity.y, move.z);
         //print(m_Rigidbody.velocity);
     }
 
-    /// Attacks and dmg dealing for combo system
-    /*private void Attack1()
+    private void Attack1()
     {
         timeOfLastAttack = Time.time;
         timeOfFirstAttack = timeOfLastAttack;
@@ -219,7 +252,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(multiplierAndDelay[1]);
         saw.DealDamage(multiplierAndDelay[0]);
-    }*/
+    }
 
     public void Die()
     {

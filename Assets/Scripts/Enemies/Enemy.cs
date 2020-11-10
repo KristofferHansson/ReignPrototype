@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody rb;
     private bool dead = false;
     private bool knockedBack = false;
-    private bool killZed = false;
+    private bool killZed = false; // has already been killed due to Z val
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        // instantiate health bar UI Slider
+        // Instantiate health bar UI Slider
         healthBar = Instantiate(healthBarPrefab).GetComponent<EnemyHPUI>();
         healthBar.transform.SetParent(GameObject.Find("UIPanel").transform, false);
         hbTransform = healthBar.GetComponent<RectTransform>();
