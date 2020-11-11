@@ -73,18 +73,7 @@ public class PlayerController : MonoBehaviour
         Move();
 
         // Saw direction and grappling / pulling stuff
-        // get mousepos
-        // Vector3 mouse = Input.mousePosition;
-        // //print(mouse);
-        // mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
-        // Vector3 temp = m_Rigidbody.transform.position;
-        // temp.y = 0;
-        // mouse.y = 0;
-        // Vector3 mouseDiff = mouse - temp;
-        // //print(mouse);
-
-        // TESTING: More accurate direction finding
-        // get mousepos
+        // Raycast from camera, simuilate ground plane to find intersection point
         Vector3 mouse = Input.mousePosition;
         //print(mouse);
         Plane aimZPlane = new Plane(Vector3.up, camRig.transform.position + new Vector3(0f,blade.transform.position.y,0f));
@@ -93,17 +82,17 @@ public class PlayerController : MonoBehaviour
         aimZPlane.Raycast(aimRay, out distToAimZPlane);
         Debug.DrawRay(aimRay.origin, aimRay.direction * distToAimZPlane, Color.cyan);
         mouse = aimRay.GetPoint(distToAimZPlane);
-        //mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, distToAimZPlane));
+        //print(mouse);
         Vector3 temp = m_Rigidbody.transform.position;
         temp.y = mouse.y;
-        //mouse.y = 0;
         Vector3 mouseDiff = mouse - temp;
         mouseDiff.y = 0;
-        //print(mouse);
+        
 
-        // rotate saw
+        // Rotate saw
         weaponHinge.transform.forward = mouseDiff;
 
+        // FUTURE: if grapple is enabled
         {
             if (heldObject && Input.GetMouseButtonDown(1))
             {// drop object if held
