@@ -74,13 +74,31 @@ public class PlayerController : MonoBehaviour
 
         // Saw direction and grappling / pulling stuff
         // get mousepos
+        // Vector3 mouse = Input.mousePosition;
+        // //print(mouse);
+        // mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
+        // Vector3 temp = m_Rigidbody.transform.position;
+        // temp.y = 0;
+        // mouse.y = 0;
+        // Vector3 mouseDiff = mouse - temp;
+        // //print(mouse);
+
+        // TESTING: More accurate direction finding
+        // get mousepos
         Vector3 mouse = Input.mousePosition;
         //print(mouse);
-        mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, (Camera.main.transform.position - camRig.position).magnitude - 1f));
+        Plane aimZPlane = new Plane(Vector3.up, camRig.transform.position + new Vector3(0f,blade.transform.position.y,0f));
+        Ray aimRay = Camera.main.ScreenPointToRay(new Vector3(mouse.x, mouse.y, 0f));
+        float distToAimZPlane = 0f;
+        aimZPlane.Raycast(aimRay, out distToAimZPlane);
+        Debug.DrawRay(aimRay.origin, aimRay.direction * distToAimZPlane, Color.cyan);
+        mouse = aimRay.GetPoint(distToAimZPlane);
+        //mouse = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, distToAimZPlane));
         Vector3 temp = m_Rigidbody.transform.position;
-        temp.y = 0;
-        mouse.y = 0;
+        temp.y = mouse.y;
+        //mouse.y = 0;
         Vector3 mouseDiff = mouse - temp;
+        mouseDiff.y = 0;
         //print(mouse);
 
         // rotate saw
