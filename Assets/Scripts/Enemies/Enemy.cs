@@ -91,7 +91,7 @@ public class Enemy : MonoBehaviour
         {
             // Immediate death actions
             lvl.IncrementScore();
-            //player.GetComponent<Player>().IncreaseHeat();
+            player.GetComponent<Player>().IncreaseHeat();
             dead = true;
             rb.constraints = RigidbodyConstraints.None;
             hitbox.enabled = false;

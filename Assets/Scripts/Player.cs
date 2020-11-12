@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 
     private void CoolDownHeat()
     {
-        HeatLevel -= 0.01f;
+        HeatLevel -= 0.005f;
         if (HeatLevel < 0.0f)
             HeatLevel = 0.0f;
         ui.SetPlayerHeat(HeatLevel / 3.0f);
