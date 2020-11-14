@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camRig;
     [SerializeField] private SawTrigger saw;
     [SerializeField] private Animator sawAnims;
+    [SerializeField] private GameObject grapplePointIndicatorPrefab; // create indicator when something is grappleable and in range
 
     public Grapple grapple;
     private Player player;
@@ -176,6 +177,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+        m_Rigidbody.constraints = RigidbodyConstraints.None;
+        Camera.main.transform.parent = null;
+        this.enabled = false;
+    }
+
+    public GameObject GetWeaponHinge()
+    {
+        return weaponHinge;
+    }
+
     // Finds component in target game object or parents
     private void FindAndReturnComponent<T>(GameObject objToSearch, out T ret)
     {
@@ -191,52 +204,5 @@ public class PlayerController : MonoBehaviour
     {
         m_Rigidbody.velocity = new Vector3(move.x, m_Rigidbody.velocity.y, move.z);
         //print(m_Rigidbody.velocity);
-    }
-
-    /// Attacks and dmg dealing for combo system
-    /*private void Attack1()
-    {
-        timeOfLastAttack = Time.time;
-        timeOfFirstAttack = timeOfLastAttack;
-        firstHitActivated = true;
-        sawAnims.SetTrigger("attack1");
-        saw.DealDamage();
-    }
-    private void Attack2()
-    {
-        timeOfLastAttack = Time.time;
-        secondHitActivated = true;
-        sawAnims.SetTrigger("attack2");
-        float delay = (0.3f + timeOfFirstAttack) - Time.time;
-        if (delay < 0.0f) delay = 0.01f;
-        float[] mad = { 1.1f, delay };
-        StartCoroutine("DealDamage", mad);
-    }
-    private void Attack3()
-    {
-        timeOfLastAttack = Time.time;
-        thirdHitActivated = true;
-        sawAnims.SetTrigger("attack3");
-        float delay = (0.9f + timeOfFirstAttack) - Time.time;
-        if (delay < 0.0f) delay = 0.01f;
-        float[] mad = { 1.5f, delay };
-        StartCoroutine("DealDamage", mad);
-    }
-    private IEnumerator DealDamage(float[] multiplierAndDelay)
-    {
-        yield return new WaitForSeconds(multiplierAndDelay[1]);
-        saw.DealDamage(multiplierAndDelay[0]);
-    }*/
-
-    public void Die()
-    {
-        m_Rigidbody.constraints = RigidbodyConstraints.None;
-        Camera.main.transform.parent = null;
-        this.enabled = false;
-    }
-
-    public GameObject GetWeaponHinge()
-    {
-        return weaponHinge;
     }
 }
