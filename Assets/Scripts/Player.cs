@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float maxHealth = 100.0f;
     [SerializeField] public float DamagePerSecond { get; private set; } = 200.0f;
     [SerializeField] private UIMiddleman ui;
-    [SerializeField] public Light sawLight;
+    [SerializeField] public Light[] sawLights;
     PlayerController pc;
     private float health;
     public float HeatLevel { get; private set; } = 0.0f;
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
         HeatLevel += 0.1f;
         if (HeatLevel > 3.0f) // heat from 0 to 3
             HeatLevel = 3.0f;
-        sawLight.intensity = 3.0f + HeatLevel * 4.0f; // intensity from 3 to 15
+        UpdateSawLights();
         ui.SetPlayerHeat(HeatLevel / 3.0f);
     }
 
@@ -59,7 +59,13 @@ public class Player : MonoBehaviour
         HeatLevel -= 0.005f;
         if (HeatLevel < 0.0f)
             HeatLevel = 0.0f;
+        UpdateSawLights();
         ui.SetPlayerHeat(HeatLevel / 3.0f);
+    }
+
+    private void UpdateSawLights() {
+        foreach (Light sl in sawLights)    
+            sl.intensity = 2.0f + HeatLevel * 4.0f; // intensity from 2 to 14
     }
 
     // Takes in damage amount and interval as floats

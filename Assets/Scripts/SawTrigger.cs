@@ -16,7 +16,7 @@ public class SawTrigger : MonoBehaviour
         if (!player) // New blademaster has been instantiated, probably
         {
             player = GameObject.Find("PlayerMaster").GetComponent<Player>();
-            player.sawLight = GameObject.Find("sawlight").GetComponent<Light>();
+            //player.sawLight = GameObject.Find("sawlight").GetComponent<Light>();
         }
 
         dmg = player.DamagePerSecond / 100.0f;
