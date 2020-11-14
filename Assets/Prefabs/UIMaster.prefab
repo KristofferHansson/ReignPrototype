@@ -1333,9 +1333,12 @@ MonoBehaviour:
   navigate: {fileID: 21300000, guid: edf5f39eaaa49bc459e174228051f854, type: 3}
   scoreText: {fileID: 2594737158076147876}
   grappleIndicator: {fileID: 1899478987127005505}
+  fog: {fileID: 0}
   gameOverPanel: {fileID: 7158121495437464478}
   victoryPanel: {fileID: 6820750910724801071}
   startPanel: {fileID: 7228639663792375777}
+  grapplePointIndicatorPrefab: {fileID: 4861286085598730154, guid: b9c4f10e6e18c5148b3b93183e9194fd,
+    type: 3}
 --- !u!1 &5912914929989508718
 GameObject:
   m_ObjectHideFlags: 0

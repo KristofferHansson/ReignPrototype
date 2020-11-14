@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camRig;
     [SerializeField] private SawTrigger saw;
     [SerializeField] private Animator sawAnims;
-    [SerializeField] private GameObject grapplePointIndicatorPrefab; // create indicator when something is grappleable and in range
 
     public Grapple grapple;
     private Player player;
@@ -116,6 +115,8 @@ public class PlayerController : MonoBehaviour
                     {
                         // show green indicator with distance of object
                         ui.ShowGrappleIndicator(hitObj.distance);
+                        // update gpi pos
+                        ui.UpdateGrappleIndicatorLocation(hitObj.collider.gameObject.transform.position);
                     }
                     else
                     {

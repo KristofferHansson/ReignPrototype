@@ -14,11 +14,16 @@ public class UIMiddleman : MonoBehaviour
     [SerializeField] private Sprite attack;
     [SerializeField] private Sprite navigate;
     [SerializeField] private Text scoreText;
-    [SerializeField] private Text grappleIndicator;
+    [SerializeField] private Text grappleIndicator; // text by character
     public Text fog;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject startPanel;
+
+    // GameObject definition, not instance
+    [SerializeField] private GameObject grapplePointIndicatorPrefab; // create indicator when something is grappleable and in range
+    private GameObject grapplePointIndicator; // indicator atop grappleable object
+    private RectTransform grapplePointIndicatorTransform;
 
 
     private bool gameOver = false;
@@ -34,6 +39,12 @@ public class UIMiddleman : MonoBehaviour
         gameOverPanel.SetActive(false);
         victoryPanel.SetActive(false);
         //startPanel.SetActive(true); // tutorial/intro message
+
+        // Initialize grapple indicator and text
+        grapplePointIndicator = Instantiate(grapplePointIndicatorPrefab);
+        grapplePointIndicator.transform.SetParent(GameObject.Find("UIPanel").transform, false);
+        grapplePointIndicatorTransform = grapplePointIndicator.GetComponent<RectTransform>();
+        grapplePointIndicator.gameObject.SetActive(false);
         grappleIndicator.gameObject.SetActive(false);
     }
     public IEnumerator FadeTextToFullAlpha(float t, Text i)
@@ -87,6 +98,7 @@ public class UIMiddleman : MonoBehaviour
             grappleIndicator.text = "Grapple unavailable";
             grappleIndicator.color = Color.grey;
             grappleIndicator.gameObject.SetActive(true);
+            grapplePointIndicator.SetActive(false);
         }
 
         else
@@ -94,7 +106,14 @@ public class UIMiddleman : MonoBehaviour
             grappleIndicator.text = distance.ToString("0.0") + " m";
             grappleIndicator.color = Color.green;
             grappleIndicator.gameObject.SetActive(true);
+            grapplePointIndicator.SetActive(true);
         }
+    }
+
+    public void UpdateGrappleIndicatorLocation(Vector3 grappleableObjectPosition)
+    {
+        Vector3 temp = Camera.main.WorldToViewportPoint(grappleableObjectPosition /*+ new Vector3(0.0f, 3.0f, 0.0f)*/);
+        grapplePointIndicatorTransform.anchoredPosition = new Vector2(temp.x, temp.y) * Offset * 2f - Offset;
     }
 
     public void LevelComplete()
