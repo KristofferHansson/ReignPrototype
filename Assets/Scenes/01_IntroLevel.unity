@@ -3704,7 +3704,12 @@ PrefabInstance:
     - target: {fileID: 3100096422363196797, guid: 3a717511e1112b54fb52b286c4a96c3d,
         type: 3}
       propertyPath: m_Name
-      value: FogPlane (1)
+      value: FogPlaneBaseColor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3100096422363196797, guid: 3a717511e1112b54fb52b286c4a96c3d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3100096422363196798, guid: 3a717511e1112b54fb52b286c4a96c3d,
         type: 3}
