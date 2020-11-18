@@ -10,7 +10,6 @@ public class UIMiddleman : MonoBehaviour
     [SerializeField] private Slider hpSlider;
     [SerializeField] private Slider heatSlider;
     [SerializeField] private Canvas c;
-    [SerializeField] private Image grappleMode;
     [SerializeField] private Sprite attack;
     [SerializeField] private Sprite navigate;
     [SerializeField] private Text scoreText;
@@ -65,13 +64,6 @@ public class UIMiddleman : MonoBehaviour
             i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a - (Time.deltaTime / t));
             yield return null;
         }
-    }
-    public void SetGrappleMode(bool combatMode)
-    {
-        if (combatMode)
-            grappleMode.sprite = attack;
-        else
-            grappleMode.sprite = navigate;
     }
     public void SetPlayerHP(float fracRemaining)
     {

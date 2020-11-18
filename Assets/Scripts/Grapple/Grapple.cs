@@ -50,7 +50,7 @@ public class Grapple : MonoBehaviour
     // Update is called once per frames
     void Update()
     {
-        uiMiddleMan.SetGrappleMode(combatMode);
+        //uiMiddleMan.SetGrappleMode(combatMode);
         if(!isGrappled)
         {
             grappleFired = false;
