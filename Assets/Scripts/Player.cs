@@ -25,10 +25,11 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float amt)
     {
+        bool wasAlive = health <= 0 ? false : true;
         health -= amt;
         ui.SetPlayerHP(health / maxHealth);
         //print("Player health is " + health + ".");
-        if (health <= 0)
+        if (health <= 0 && wasAlive)
         {
             // die
             pc.Die();

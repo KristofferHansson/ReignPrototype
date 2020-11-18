@@ -277,6 +277,7 @@ MonoBehaviour:
   move_Speed: 15
   playerMaster: {fileID: 1471531318}
   weaponHinge: {fileID: 218379024}
+  weaponColliderForRagdoll: {fileID: 266098147}
   blade: {fileID: 429750705527827555}
   ui: {fileID: 0}
   camRig: {fileID: 8596134444039964527}
@@ -686,15 +687,15 @@ PrefabInstance:
       objectReference: {fileID: 1471531320}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f21569652ee1a3408396cbf4239fc7a, type: 3}
---- !u!1 &429750705527827555 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6242548507861381795, guid: 9f21569652ee1a3408396cbf4239fc7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6005333732323319488}
-  m_PrefabAsset: {fileID: 0}
 --- !u!108 &293280935081706811 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 6288936317208091643, guid: 9f21569652ee1a3408396cbf4239fc7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6005333732323319488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &266098147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6005333732562635555, guid: 9f21569652ee1a3408396cbf4239fc7a,
     type: 3}
   m_PrefabInstance: {fileID: 6005333732323319488}
   m_PrefabAsset: {fileID: 0}
@@ -713,6 +714,12 @@ MonoBehaviour:
 --- !u!4 &4979858931068698009 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1606439704858370905, guid: 9f21569652ee1a3408396cbf4239fc7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6005333732323319488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &429750705527827555 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6242548507861381795, guid: 9f21569652ee1a3408396cbf4239fc7a,
     type: 3}
   m_PrefabInstance: {fileID: 6005333732323319488}
   m_PrefabAsset: {fileID: 0}

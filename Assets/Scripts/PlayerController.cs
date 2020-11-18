@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float move_Speed = 1.0f;
     [SerializeField] private GameObject playerMaster;
     [SerializeField] private GameObject weaponHinge;
+    [SerializeField] private GameObject weaponColliderForRagdoll = null;
     [SerializeField] private GameObject blade;
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private Transform camRig;
@@ -42,11 +43,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /// KILLZ
         if (transform.position.y < -40.0f) // Eventually change to get current level killz
             player.TakeDamage(100.0f);
 
         float x = 0.0f, z = 0.0f;
 
+        /// MOVEMENT
         // Check for input // Convert to getaxes
         if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             z += 1.0f;
@@ -72,6 +75,8 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
+
+        /// ROTATION AND GRAPPLING
         // Saw direction and grappling / pulling stuff
         // Raycast from camera, simuilate ground plane to find intersection point
         Vector3 mouse = Input.mousePosition;
@@ -183,6 +188,13 @@ public class PlayerController : MonoBehaviour
         m_Rigidbody.constraints = RigidbodyConstraints.None;
         Camera.main.transform.parent = null;
         this.enabled = false;
+
+        if (weaponColliderForRagdoll != null) {
+            weaponHinge.transform.parent = null;
+            weaponColliderForRagdoll.SetActive(true);
+            Rigidbody tempRb = weaponHinge.gameObject.AddComponent<Rigidbody>();
+            tempRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        }
     }
 
     public GameObject GetWeaponHinge()
