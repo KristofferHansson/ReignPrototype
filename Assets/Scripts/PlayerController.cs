@@ -129,11 +129,19 @@ public class PlayerController : MonoBehaviour
                     }
 
                     Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                    if (objHit && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))) // GRAPPLE movement command
+
+                    // GRAPPLE-TO movement command
+                    if (objHit && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
                     {
-                        playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
+                        // For instantaneous movement to grapple point:
+                        //playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
+                        
+                        // For gradual movement to grapple point:
+                        Vector3 targetPos = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
+                        StartCoroutine("MoveToLocationOverTime", targetPos);
                     }
-                    else if (Input.GetMouseButtonDown(1)) // PULL command
+                    // PULL OBJECT/ENEMY command
+                    else if (Input.GetMouseButtonDown(1))
                     {
                         //print("PULL");
                         // lift vector off ground
@@ -217,5 +225,26 @@ public class PlayerController : MonoBehaviour
     {
         m_Rigidbody.velocity = new Vector3(move.x, m_Rigidbody.velocity.y, move.z);
         //print(m_Rigidbody.velocity);
+    }
+
+    // EXPERIMENTAL: Moves player towards target location over time
+    private IEnumerator MoveToLocationOverTime(Vector3 targetPos)
+    {
+        float grappleToSpeed = 5f;
+        m_Rigidbody.useGravity = false;
+
+        while (true)
+        {
+            playerMaster.transform.position += (targetPos - playerMaster.transform.position) * Time.deltaTime * grappleToSpeed;
+            
+            if (Vector3.Distance(playerMaster.transform.position, targetPos) <= 2f) {
+                print("Player at target position. Stopping grapple-to.");
+                m_Rigidbody.useGravity = true;
+                yield break;
+            }
+
+            yield return new WaitForFixedUpdate();
+            
+        }
     }
 }
