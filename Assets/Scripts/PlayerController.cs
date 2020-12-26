@@ -80,22 +80,22 @@ public class PlayerController : MonoBehaviour
         /// ROTATION AND GRAPPLING
         // Saw direction and grappling / pulling stuff
         // Raycast from camera, simuilate ground plane to find intersection point
-        Vector3 mouse = Input.mousePosition;
+        Vector3 mousePos = Input.mousePosition;
         //print(mouse);
         Plane aimZPlane = new Plane(Vector3.up, camRig.transform.position + new Vector3(0f,blade.transform.position.y,0f));
-        Ray aimRay = Camera.main.ScreenPointToRay(new Vector3(mouse.x, mouse.y, 0f));
+        Ray aimRay = Camera.main.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, 0f));
         float distToAimZPlane = 0f;
         aimZPlane.Raycast(aimRay, out distToAimZPlane);
         Debug.DrawRay(aimRay.origin, aimRay.direction * distToAimZPlane, Color.cyan);
-        mouse = aimRay.GetPoint(distToAimZPlane);
+        mousePos = aimRay.GetPoint(distToAimZPlane);
         //print(mouse);
-        Vector3 temp = m_Rigidbody.transform.position;
-        temp.y = mouse.y;
-        Vector3 mouseDiff = mouse - temp;
-        mouseDiff.y = 0;
+        Vector3 origin = m_Rigidbody.transform.position;
+        origin.y = mousePos.y;
+        Vector3 mouseDirection = mousePos - origin;
+        mouseDirection.y = 0;
         
         // Rotate saw
-        weaponHinge.transform.forward = mouseDiff;
+        weaponHinge.transform.forward = mouseDirection;
 
         // Grapple stuff
         // FUTURE: conditional block: if (grapple is enabled)
@@ -128,9 +128,9 @@ public class PlayerController : MonoBehaviour
             {
                 // Note: hitObj is for grappling self, hitEnemy is for pulling enemy
                 // Send out ray each frame to update grapple indicator on UI
-                temp.y = m_Rigidbody.transform.position.y + 1.5f;
+                origin.y = m_Rigidbody.transform.position.y + 1.5f;
                 bool objHit = false;
-                if (objHit = Physics.Raycast(temp, mouseDiff, out RaycastHit hitObj, maxGrappleDistance, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
+                if (objHit = Physics.Raycast(origin, mouseDirection, out RaycastHit hitObj, maxGrappleDistance, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
                 {
                     // show green indicator with distance of object
                     ui.ShowGrappleIndicator(hitObj.distance);
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
                     ui.ShowGrappleIndicator(-1.0f);
                 }
 
-                Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
+                Debug.DrawRay(origin, mouseDirection * 100.0f, Color.yellow);
 
                 // GRAPPLE-TO movement command
                 if (objHit && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
@@ -160,8 +160,8 @@ public class PlayerController : MonoBehaviour
                 {
                     //print("PULL");
                     // lift vector off ground
-                    Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                    if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, maxGrappleDistance, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
+                    Debug.DrawRay(origin, mouseDirection * 100.0f, Color.yellow);
+                    if (Physics.Raycast(origin, mouseDirection, out RaycastHit hit, maxGrappleDistance, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
                     {
                         GameObject goHit = hit.collider.gameObject;
                         //print("OBJECT HIT! " + goHit.name);
