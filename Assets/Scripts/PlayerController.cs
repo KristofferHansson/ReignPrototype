@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private bool firstHitActivated = false;
     private bool secondHitActivated = false;
     private bool thirdHitActivated = false;
+    private Vector3 bladeDefaultPos;
     private float bladeDistance = 0.0f;
     private float timeOfFirstAttack = 0.0f;
     private float timeOfLastAttack = -1.0f;
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
         player = playerMaster.GetComponent<Player>();
         m_Rigidbody = GetComponent<Rigidbody>();
-
+        bladeDefaultPos = blade.transform.localPosition;
         //attackTrigger.SetActive(false);
     }
 
@@ -77,7 +78,8 @@ public class PlayerController : MonoBehaviour
         Move();
 
 
-        /// ROTATION AND GRAPPLING
+        /// AIM, ROTATION, AND GRAPPLING
+        
         // Saw direction and grappling / pulling stuff
         // Raycast from camera, simuilate ground plane to find intersection point
         Vector3 mousePos = Input.mousePosition;
@@ -116,8 +118,7 @@ public class PlayerController : MonoBehaviour
                 // scroll wheel reels in blade
                 if (Input.mouseScrollDelta.y < 0.0f)
                 {
-                    bladeExtended = false;
-                    blade.transform.position += blade.transform.forward * -bladeDistance;
+                    StartCoroutine("RetractBladeOverTime");
 
                     if (heldEnemy != null) // Heal when enemies are pulled in
                         player.Heal(10.0f);
@@ -129,7 +130,7 @@ public class PlayerController : MonoBehaviour
             // Blade is in default position
             else
             {
-                // NOTE: Two raycasts used so that player can grapple to object behind enemy who would otherwise be first obj hit
+                // NOTE: Two raycasts used so that player can grapple to object behind enemy or pull-to obj that would otherwise be first obj hit
                 // 'grapple' ray cast each frame to display indicator, 'pull-to' ray cast only on frames where pull-to command detected
 
                 // Send out ray each frame to update grapple indicator on UI
@@ -211,7 +212,7 @@ public class PlayerController : MonoBehaviour
         return weaponHinge;
     }
 
-    // Finds component in target game object or parents
+    // Find component in target game object or parents
     private void FindAndReturnComponent<T>(GameObject objToSearch, out T ret)
     {
         T c = objToSearch.GetComponent<T>();
@@ -228,7 +229,7 @@ public class PlayerController : MonoBehaviour
         //print(m_Rigidbody.velocity);
     }
 
-    // EXPERIMENTAL: Moves player towards target location over time
+    // EXPERIMENTAL: Move player towards target location over time
     private IEnumerator MoveToLocationOverTime(Vector3 targetPos)
     {
         float grappleToSpeed = 7f;
@@ -245,28 +246,42 @@ public class PlayerController : MonoBehaviour
             }
 
             yield return new WaitForFixedUpdate();
-            
         }
     }
 
-        // EXPERIMENTAL: Moves player towards target location over time
+    // EXPERIMENTAL: Move object to player over time
     private IEnumerator PullObjectOverTime(GameObject targetObj)
     {
         float grappleToSpeed = 7f;
-        //m_Rigidbody.useGravity = false;
-
         while (true)
         {
             targetObj.transform.position += (targetObj.transform.position - playerMaster.transform.position) * Time.deltaTime * grappleToSpeed;
             
             if (Vector3.Distance(playerMaster.transform.position, targetObj.transform.position) <= 2f) {
                 print("Object at player position. Stopping pull-to.");
-                //m_Rigidbody.useGravity = true;
                 yield break;
             }
 
             yield return new WaitForFixedUpdate();
+        }
+    }
+
+    // EXPERIMENTAL: Retract blade over time
+    private IEnumerator RetractBladeOverTime()
+    {
+        float grappleToSpeed = 5f;
+        while (true)
+        {
+            blade.transform.localPosition += new Vector3(0f,0f,-1f) * Time.deltaTime * grappleToSpeed;
             
+            if (Vector3.Distance(bladeDefaultPos, blade.transform.localPosition) < 0.1f) {
+                blade.transform.localPosition = bladeDefaultPos;
+                bladeExtended = false;
+                //print("Blade retracted. Stopping pull-to.");
+                yield break;
+            }
+
+            yield return new WaitForFixedUpdate();
         }
     }
 }
