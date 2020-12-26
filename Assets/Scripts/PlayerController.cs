@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float move_Speed = 1.0f;
+    [SerializeField] private float maxGrappleDistance = 30.0f;
     [SerializeField] private GameObject playerMaster;
     [SerializeField] private GameObject weaponHinge;
     [SerializeField] private GameObject weaponColliderForRagdoll = null;
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour
                     // Send out ray each frame to update grapple indicator on UI
                     temp.y = m_Rigidbody.transform.position.y + 1.5f;
                     bool objHit = false;
-                    if (objHit = Physics.Raycast(temp, mouseDiff, out RaycastHit hitObj, 30.0f, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
+                    if (objHit = Physics.Raycast(temp, mouseDiff, out RaycastHit hitObj, maxGrappleDistance, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
                     {
                         // show green indicator with distance of object
                         ui.ShowGrappleIndicator(hitObj.distance);
@@ -125,6 +126,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
+                        // disable grapple indicator text and dot
                         ui.ShowGrappleIndicator(-1.0f);
                     }
 
@@ -146,7 +148,7 @@ public class PlayerController : MonoBehaviour
                         //print("PULL");
                         // lift vector off ground
                         Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                        if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, 100.0f, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
+                        if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, maxGrappleDistance, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
                         {
                             GameObject goHit = hit.collider.gameObject;
                             //print("OBJECT HIT! " + goHit.name);
