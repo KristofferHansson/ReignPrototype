@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour
         //print(m_Rigidbody.velocity);
     }
 
-    // EXPERIMENTAL: Move player towards target location over time
+    // Move player towards target location over time
     private IEnumerator MoveToLocationOverTime(Vector3 targetPos)
     {
         float grappleToSpeed = 7f;
@@ -266,15 +266,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // EXPERIMENTAL: Retract blade over time
+    // Retract blade over time
     private IEnumerator RetractBladeOverTime()
     {
-        float grappleToSpeed = 5f;
+        float grappleToSpeed = 10f;
         while (true)
         {
             blade.transform.localPosition += new Vector3(0f,0f,-1f) * Time.deltaTime * grappleToSpeed;
             
-            if (Vector3.Distance(bladeDefaultPos, blade.transform.localPosition) < 0.1f) {
+            if (blade.transform.localPosition.z < bladeDefaultPos.z) {
                 blade.transform.localPosition = bladeDefaultPos;
                 bladeExtended = false;
                 //print("Blade retracted. Stopping pull-to.");
