@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         move.x = x;
         move.z = z;
         move.Normalize();
-        move = Quaternion.Euler(0f, -45f, 0f) * move;
+        move = Quaternion.Euler(0f, -45f, 0f) * move; // adjust rot for camera view
         move *= move_Speed;
         //move.y = Physics.gravity.y * Time.deltaTime * 2.0f;
         if (move.y < -3.0f)
@@ -122,13 +122,19 @@ public class PlayerController : MonoBehaviour
                     if (heldEnemy != null) // Heal when enemies are pulled in
                         player.Heal(10.0f);
                 }
+
+                // disable grapple indicator text and dot
+                ui.ShowGrappleIndicator(-1.0f);
             }
             // Blade is in default position
             else
             {
-                // Note: hitObj is for grappling self, hitEnemy is for pulling enemy
+                // NOTE: Two raycasts used so that player can grapple to object behind enemy who would otherwise be first obj hit
+                // 'grapple' ray cast each frame to display indicator, 'pull-to' ray cast only on frames where pull-to command detected
+
                 // Send out ray each frame to update grapple indicator on UI
                 origin.y = m_Rigidbody.transform.position.y + 1.5f;
+                Debug.DrawRay(origin, mouseDirection * 100.0f, Color.yellow);
                 bool objHit = false;
                 if (objHit = Physics.Raycast(origin, mouseDirection, out RaycastHit hitObj, maxGrappleDistance, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
                 {
@@ -143,10 +149,8 @@ public class PlayerController : MonoBehaviour
                     ui.ShowGrappleIndicator(-1.0f);
                 }
 
-                Debug.DrawRay(origin, mouseDirection * 100.0f, Color.yellow);
-
                 // GRAPPLE-TO movement command
-                if (objHit && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
+                if (objHit && (Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space)) )
                 {
                     // For instantaneous movement to grapple point:
                     //playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
@@ -156,36 +160,32 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine("MoveToLocationOverTime", targetPos);
                 }
                 // PULL OBJECT/ENEMY command
-                else if (Input.GetMouseButtonDown(1))
+                else if (Input.GetMouseButtonDown(1)
+                    && Physics.Raycast(origin, mouseDirection, out RaycastHit hit, maxGrappleDistance, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
                 {
-                    //print("PULL");
-                    // lift vector off ground
-                    Debug.DrawRay(origin, mouseDirection * 100.0f, Color.yellow);
-                    if (Physics.Raycast(origin, mouseDirection, out RaycastHit hit, maxGrappleDistance, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
+                    GameObject goHit = hit.collider.gameObject;
+                    //print("OBJECT HIT! " + goHit.name);
+                    FindAndReturnComponent(goHit, out Rigidbody rb);
+                    if (rb != null) // only pull objects with a rigidbody to avoid static objs
                     {
-                        GameObject goHit = hit.collider.gameObject;
-                        //print("OBJECT HIT! " + goHit.name);
-                        FindAndReturnComponent(goHit, out Rigidbody rb);
-                        if (rb != null) // only pull objects with a rigidbody to avoid static objs
+                        //print("PULL");
+
+                        FindAndReturnComponent(goHit, out Enemy e);
+                        if (e != null)
                         {
-                            FindAndReturnComponent(goHit, out Enemy e);
-                            if (e != null)
-                            {
-                                e.Grab();
-                                heldEnemy = e;
-                            }
-
-                            // Extend blade
-                            bladeExtended = true;
-                            //blade.transform.position = hit.point;
-                            bladeDistance = hit.distance - 5.0f;
-                            blade.transform.position += blade.transform.forward * bladeDistance;
-
-                            // Hold object
-                            rb.isKinematic = true;
-                            rb.gameObject.transform.parent = blade.transform;
-                            heldObject = rb.gameObject;
+                            e.Grab();
+                            heldEnemy = e;
                         }
+
+                        // Extend blade
+                        bladeExtended = true;
+                        bladeDistance = hit.distance - 5.0f;
+                        blade.transform.position += blade.transform.forward * bladeDistance;
+
+                        // Begin holding object
+                        rb.isKinematic = true;
+                        rb.gameObject.transform.parent = blade.transform;
+                        heldObject = rb.gameObject;
                     }
                 }
             }
@@ -239,7 +239,7 @@ public class PlayerController : MonoBehaviour
             playerMaster.transform.position += (targetPos - playerMaster.transform.position) * Time.deltaTime * grappleToSpeed;
             
             if (Vector3.Distance(playerMaster.transform.position, targetPos) <= 2f) {
-                print("Player at target position. Stopping grapple-to.");
+                //print("Player at target position. Stopping grapple-to.");
                 m_Rigidbody.useGravity = true;
                 yield break;
             }
