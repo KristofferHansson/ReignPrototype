@@ -93,11 +93,11 @@ public class PlayerController : MonoBehaviour
         Vector3 mouseDiff = mouse - temp;
         mouseDiff.y = 0;
         
-
         // Rotate saw
         weaponHinge.transform.forward = mouseDiff;
 
-        // FUTURE: if grapple is enabled
+        // Grapple stuff
+        // FUTURE: conditional block: if (grapple is enabled)
         {
             if (heldObject && Input.GetMouseButtonDown(1))
             {// drop object if held
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
                         //print("PULL");
                         // lift vector off ground
                         Debug.DrawRay(temp, mouseDiff * 100.0f, Color.yellow);
-                        if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, 100.0f, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger")
+                        if (Physics.Raycast(temp, mouseDiff, out RaycastHit hit, 100.0f, ~(1 << 2)) && hit.collider.gameObject.name != "sawtrigger" && hit.distance > 6f)
                         {
                             GameObject goHit = hit.collider.gameObject;
                             //print("OBJECT HIT! " + goHit.name);
@@ -230,7 +230,7 @@ public class PlayerController : MonoBehaviour
     // EXPERIMENTAL: Moves player towards target location over time
     private IEnumerator MoveToLocationOverTime(Vector3 targetPos)
     {
-        float grappleToSpeed = 5f;
+        float grappleToSpeed = 7f;
         m_Rigidbody.useGravity = false;
 
         while (true)
