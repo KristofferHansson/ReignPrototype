@@ -20,8 +20,8 @@ public class PlayerController : MonoBehaviour
     private GameObject heldObject;
     private Enemy heldEnemy;
     private bool bladeExtended = false;
+    private bool bladeRetracting = false;
     private Vector3 bladeDefaultPos;
-    private float bladeDistance = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -111,10 +111,9 @@ public class PlayerController : MonoBehaviour
                 // scroll wheel reels in blade
                 if (Input.mouseScrollDelta.y < 0.0f)
                 {
-                    StartCoroutine("RetractBladeOverTime");
-
-                    if (heldEnemy != null) // Heal when enemies are pulled in
+                    if (!bladeRetracting && heldEnemy != null) // Heal when enemies are pulled in
                         player.Heal(10.0f);
+                    StartCoroutine("RetractBladeOverTime");
                 }
 
                 // disable grapple indicator text and dot
@@ -173,8 +172,9 @@ public class PlayerController : MonoBehaviour
 
                         // Extend blade
                         bladeExtended = true;
-                        bladeDistance = hit.distance - 5.0f;
+                        float bladeDistance = hit.distance - 5.0f;
                         blade.transform.position += blade.transform.forward * bladeDistance;
+                        //StartCoroutine("RetractBladeOverTime");
 
                         // Begin holding object
                         rb.isKinematic = true;
@@ -262,7 +262,8 @@ public class PlayerController : MonoBehaviour
     // Retract blade over time
     private IEnumerator RetractBladeOverTime()
     {
-        float grappleToSpeed = 10f;
+        float grappleToSpeed = 40f;
+        bladeRetracting = true;
         while (true)
         {
             blade.transform.localPosition += new Vector3(0f,0f,-1f) * Time.deltaTime * grappleToSpeed;
@@ -270,6 +271,7 @@ public class PlayerController : MonoBehaviour
             if (blade.transform.localPosition.z < bladeDefaultPos.z) {
                 blade.transform.localPosition = bladeDefaultPos;
                 bladeExtended = false;
+                bladeRetracting = false;
                 //print("Blade retracted. Stopping pull-to.");
                 yield break;
             }
