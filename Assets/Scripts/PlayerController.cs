@@ -13,22 +13,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private Transform camRig;
     [SerializeField] private SawTrigger saw;
-    [SerializeField] private Animator sawAnims;
 
-    public Grapple grapple;
     private Player player;
     private Rigidbody m_Rigidbody;
     private Vector3 move;
     private GameObject heldObject;
     private Enemy heldEnemy;
     private bool bladeExtended = false;
-    private bool firstHitActivated = false;
-    private bool secondHitActivated = false;
-    private bool thirdHitActivated = false;
     private Vector3 bladeDefaultPos;
     private float bladeDistance = 0.0f;
-    private float timeOfFirstAttack = 0.0f;
-    private float timeOfLastAttack = -1.0f;
 
     // Start is called before the first frame update
     void Start()
