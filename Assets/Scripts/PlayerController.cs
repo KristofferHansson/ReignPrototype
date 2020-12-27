@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private Enemy heldEnemy;
     private bool bladeExtended = false;
     private bool bladeRetracting = false;
+    private bool bladeGrappling = false;
     private Vector3 bladeDefaultPos;
 
     // Start is called before the first frame update
@@ -90,7 +91,8 @@ public class PlayerController : MonoBehaviour
         mouseDirection.y = 0;
         
         // Rotate saw
-        weaponHinge.transform.forward = mouseDirection;
+        if (!bladeGrappling)
+            weaponHinge.transform.forward = mouseDirection;
 
         // Grapple stuff
         // FUTURE: conditional block: if (grapple is enabled)
@@ -115,7 +117,9 @@ public class PlayerController : MonoBehaviour
                         player.Heal(10.0f);
                     StartCoroutine("RetractBladeOverTime");
                 }
-
+            }
+            else if (bladeGrappling)
+            {
                 // disable grapple indicator text and dot
                 ui.ShowGrappleIndicator(-1.0f);
             }
@@ -149,7 +153,11 @@ public class PlayerController : MonoBehaviour
                     //playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
                     
                     // For gradual movement to grapple point:
+                    bladeGrappling = true;
                     Vector3 targetPos = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
+                    float bladeDistance = hitObj.distance - 2.0f;
+                    blade.transform.position += blade.transform.forward * bladeDistance;
+                    blade.transform.parent = null;
                     StartCoroutine("MoveToLocationOverTime", targetPos);
                 }
                 // PULL OBJECT/ENEMY command
@@ -230,11 +238,15 @@ public class PlayerController : MonoBehaviour
 
         while (true)
         {
+            // NOTE: This math creates a decelerating effect as player nears target
             playerMaster.transform.position += (targetPos - playerMaster.transform.position) * Time.deltaTime * grappleToSpeed;
             
             if (Vector3.Distance(playerMaster.transform.position, targetPos) <= 2f) {
                 //print("Player at target position. Stopping grapple-to.");
+                blade.transform.parent = weaponHinge.transform;
+                blade.transform.localPosition = bladeDefaultPos;
                 m_Rigidbody.useGravity = true;
+                bladeGrappling = false;
                 yield break;
             }
 
