@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private float health;
     private Rigidbody rb;
     private bool dead = false;
+    private bool grabbed = false;
     private bool knockedBack = false;
     private bool killZed = false; // has already been killed due to Z val
 
@@ -66,7 +67,7 @@ public class Enemy : MonoBehaviour
         transform.LookAt(player);
         if (Vector3.Distance(transform.position, player.position) >= 1.2f)
         {
-            if (!dead && !knockedBack) // GameObj position
+            if (!grabbed && !dead && !knockedBack) // GameObj position
             {
                 transform.position += transform.forward * speed * Time.deltaTime;
             }
@@ -135,13 +136,15 @@ public class Enemy : MonoBehaviour
 
     public void Grab()
     {
-        this.enabled = false;
+        grabbed = true;
     }
 
     public void Release()
     {
         if (health > 0.0f)
-            this.enabled = true;
+        {
+            grabbed = false;
+        }
     }
 
     // Takes in damage amount and interval as floats
