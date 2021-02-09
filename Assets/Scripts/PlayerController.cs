@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
                 origin.y = m_Rigidbody.transform.position.y + 1.5f;
                 Debug.DrawRay(origin, mouseDirection * 100.0f, Color.yellow);
                 bool objHit = false;
-                if (objHit = Physics.Raycast(origin, mouseDirection, out RaycastHit hitObj, maxGrappleDistance, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger")
+                if (objHit = Physics.Raycast(origin, mouseDirection, out RaycastHit hitObj, maxGrappleDistance, ~((1 << 2) | (1 << 9))) && hitObj.collider.gameObject.name != "sawtrigger" && hitObj.distance > 6f)
                 {
                     // show green indicator with distance of object
                     ui.ShowGrappleIndicator(hitObj.distance);
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 // GRAPPLE-TO movement command
-                if (objHit && (Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space)) )
+                if (objHit && (Input.GetMouseButtonDown(0)||Input.GetKeyDown(KeyCode.Space)) && hitObj.distance > 6f)
                 {
                     // For instantaneous movement to grapple point:
                     //playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
