@@ -103,16 +103,17 @@ public class Enemy : MonoBehaviour
 
     public void KnockBack()
     {
-        StartCoroutine(MoveBackOverTime());
+        if (!knockedBack)
+            StartCoroutine(MoveBackOverTime(3, 5.0f, 0));
     }
-    private IEnumerator MoveBackOverTime()
+    private IEnumerator MoveBackOverTime(int knockBackDuration = 4, float knockBackSpeed = 20.0f, int stunDuration = 11)
     {
         knockedBack = true;
-        for (int i = 0; i < 4; i++) { // move back for 4 frames
-            this.transform.position += this.transform.forward * -20.0f * Time.deltaTime;
+        for (int i = 0; i < knockBackDuration; i++) { // move back for 4 frames
+            this.transform.position += this.transform.forward * -knockBackSpeed * Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        for (int i = 0; i < 11; i++) { // stun for 11 frames
+        for (int i = 0; i < stunDuration; i++) { // stun for stunDuration frames
             yield return new WaitForEndOfFrame();
         }
         knockedBack = false;

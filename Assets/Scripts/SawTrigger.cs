@@ -98,6 +98,7 @@ public class SawTrigger : MonoBehaviour
                eHit = true;
            if (eHit)
            {
+               e.KnockBack();
                //print("Damaging enemy for " + dmg + " points.");
                e.BeginPeriodicDamage(dmg + dmg * (player.HeatLevel / 10.0f)); // so, heat level of 3 = 30% dmg increase
                //e.TakeDamage(dmg);
