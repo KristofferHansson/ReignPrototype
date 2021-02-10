@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private UIMiddleman ui;
     [SerializeField] private Transform camRig;
     [SerializeField] private SawTrigger saw;
+    [SerializeField] AudioSource mainAudio;
 
     private Player player;
     private Rigidbody m_Rigidbody;
@@ -43,9 +44,15 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -40.0f) // Eventually change to get current level killz
             player.TakeDamage(100.0f);
 
-        float x = 0.0f, z = 0.0f;
+        /// OTHER INPUT (e.g. menus, mute)
+        if (Input.GetKeyDown(KeyCode.M)) {
+            if (mainAudio)
+                mainAudio.volume = 0.0f;
+        }
+
 
         /// MOVEMENT
+        float x = 0.0f, z = 0.0f;
         // Check for input // Convert to getaxes
         if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             z += 1.0f;
