@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         // Raycast from camera, simuilate ground plane to find intersection point
         Vector3 mousePos = Input.mousePosition;
         //print(mouse);
-        Plane aimZPlane = new Plane(Vector3.up, camRig.transform.position + new Vector3(0f,blade.transform.position.y,0f));
+        Plane aimZPlane = new Plane(Vector3.up, new Vector3(0f, blade.transform.position.y, 0f));
         Ray aimRay = Camera.main.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, 0f));
         float distToAimZPlane = 0f;
         aimZPlane.Raycast(aimRay, out distToAimZPlane);
