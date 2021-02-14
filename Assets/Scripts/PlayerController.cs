@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private Vector3 move;
     private GameObject heldObject;
+    private Vector3 hitObjPos; // pos of grapple-to object
     private Enemy heldEnemy;
     private bool bladeExtended = false;
     private bool bladeRetracting = false;
@@ -76,7 +77,8 @@ public class PlayerController : MonoBehaviour
         else if (move.y > 3.0f)
             move.y = 3.0f;
 
-        Move();
+        if (!bladeGrappling)
+            Move();
 
 
         /// AIM, ROTATION, AND GRAPPLING
@@ -98,12 +100,16 @@ public class PlayerController : MonoBehaviour
         mouseDirection.y = 0;
         
         // Rotate saw
-        if (!bladeGrappling)
+        if (!bladeGrappling && !bladeExtended)
             weaponHinge.transform.forward = mouseDirection;
 
         // Grapple stuff
         // FUTURE: conditional block: if (grapple is enabled)
         {
+            if (bladeGrappling || bladeExtended)
+                // disable grapple indicator text and dot
+                ui.ShowGrappleIndicator(-1.0f);
+
             // If object is held and release button pressed (obj can be held w/ blade in or out)
             if (heldObject && Input.GetMouseButtonDown(1))
             {// drop object
@@ -117,18 +123,20 @@ public class PlayerController : MonoBehaviour
             // If blade is out (extended)
             else if (bladeExtended)
             {
-                // scroll wheel reels in blade
-                if (Input.mouseScrollDelta.y < 0.0f)
+                // scroll wheel reels in blade // PULL-TO
+                if (Input.mouseScrollDelta.y < 0.0f && heldObject != null)
                 {
                     if (!bladeRetracting && heldEnemy != null) // Heal when enemies are pulled in
                         player.Heal(10.0f);
                     StartCoroutine("RetractBladeOverTime");
                 }
-            }
-            else if (bladeGrappling)
-            {
-                // disable grapple indicator text and dot
-                ui.ShowGrappleIndicator(-1.0f);
+                // GRAPPLE-TO
+                else if (Input.mouseScrollDelta.y > 0.0f && heldObject == null)
+                {
+                    bladeExtended = false;
+                    bladeGrappling = true;
+                    StartCoroutine("MoveToLocationOverTime", hitObjPos);
+                }
             }
             // Blade is in default position
             else
@@ -160,12 +168,13 @@ public class PlayerController : MonoBehaviour
                     //playerMaster.transform.position = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
                     
                     // For gradual movement to grapple point:
-                    bladeGrappling = true;
+                    bladeExtended = true;
                     Vector3 targetPos = playerMaster.transform.position + blade.transform.forward * hitObj.distance;
                     float bladeDistance = hitObj.distance - 2.0f;
                     blade.transform.position += blade.transform.forward * bladeDistance;
                     blade.transform.parent = null;
-                    StartCoroutine("MoveToLocationOverTime", targetPos);
+                    hitObjPos = targetPos;
+                    //StartCoroutine("MoveToLocationOverTime", targetPos);
                 }
                 // PULL OBJECT/ENEMY command
                 else if (Input.GetMouseButtonDown(1)
@@ -254,6 +263,7 @@ public class PlayerController : MonoBehaviour
                 blade.transform.localPosition = bladeDefaultPos;
                 m_Rigidbody.useGravity = true;
                 bladeGrappling = false;
+                bladeExtended = false;
                 yield break;
             }
 
